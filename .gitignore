@@ -1,6 +1,32 @@
+# Ignore project build artifacts
+build/
 *.class
+*.exe
+bin/
+out/
 
-# Package Files #
-*.jar
-*.war
-*.ear
+# Ignore developer specific files
+*.db
+.gradle
+
+# Ignore runtime files
+*.log
+logfile.txt
+logfile.txt.*
+logfile.log
+logfile.log.*
+
+# Ignore Operating System specific files
+.DS_Store
+
+# Ignore IDE/Editor specific files
+.project
+.classpath
+.idea/
+*.ipr
+*.iws
+*.iml
+*.swp
+*~
+
+do-git
