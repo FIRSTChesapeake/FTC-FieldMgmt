@@ -1,8 +1,5 @@
 /**
- * 
- */
-/**
- * @author matthew
- *
+ * @author Matthew Glennon (mglennon@virginiafirst.org)
+ * https://github.com/VirginiaFIRST/FTC-FieldMgmt
  */
 package Main;
