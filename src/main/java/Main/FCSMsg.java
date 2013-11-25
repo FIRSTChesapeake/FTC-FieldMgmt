@@ -6,17 +6,19 @@ package Main;
 /**
  * @author Matthew Glennon (mglennon@virginiafirst.org)
  * https://github.com/VirginiaFIRST/FTC-FieldMgmt
+ * 
+ * FCS and Underlying UDP stream format (c) John Toebes
  */
 public class FCSMsg {
 	// Team Status Bytes
 	public static final int TEAM_STATUS_OK						= 0x0000;
-	public static final int TEAM_STATUS_WARNING					= 0x0001; // Yellow
-	public static final int TEAM_STATUS_ERROR					= 0x0002; // Red
-	public static final int TEAM_STATUS_DISABLED				= 0x0003; // Red also
+	public static final int TEAM_STATUS_WARNING					= 0x0001;
+	public static final int TEAM_STATUS_ERROR					= 0x0002;
+	public static final int TEAM_STATUS_DISABLED				= 0x0003;
 	// Match Types
 	public static final int MATCH_TYPE_PRACTICE					= 0x0000;
 	public static final int MATCH_TYPE_QUALIFICATION			= 0x0001;
-	public static final int MATCH_TYPE_QUARTERFINAL				= 0x0002;  // not currently used in FTC
+	public static final int MATCH_TYPE_QUARTERFINAL				= 0x0002;
 	public static final int MATCH_TYPE_SEMI_FINAL				= 0x0003;
 	public static final int MATCH_TYPE_FINAL					= 0x0004;
 	// Match Configs
@@ -30,7 +32,7 @@ public class FCSMsg {
 	public static final int MATCH_STATE_TELEOP_WAITING			= 0x0010;
 	public static final int MATCH_STATE_TELEOP_RUNNING			= 0x0011;
 	public static final int MATCH_STATE_TELEOP_ENDED			= 0x0012;
-	public static final int MATCH_STATE_ENDGAME_RUNNING			= 0x0020;  // Note that this can be set along with MATCH_STATE_TELEOP_RUNNING
+	public static final int MATCH_STATE_ENDGAME_RUNNING			= 0x0020;
 	public static final int MATCH_STATE_ENDGAME_ENDED			= 0x0040;
 	
 	public int iMessageID;
