@@ -17,16 +17,20 @@ import org.apache.mina.transport.socket.nio.NioDatagramAcceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sun.java.swing.plaf.windows.resources.windows;
+
 /**
  * @author Matthew Glennon (mglennon@virginiafirst.org)
  *         https://github.com/VirginiaFIRST/FTC-FieldMgmt
  */
 public class Main {
 
-    final public static Logger         logger = LoggerFactory.getLogger(Main.class);
-    private static FtpServer           FTPserver;
-    private static NioDatagramAcceptor UDPserver;
+    final public static Logger              logger      = LoggerFactory.getLogger(Main.class);
+    private static      FtpServer           FTPserver;
+    private static      NioDatagramAcceptor UDPserver;
 
+    public static       MainWindow          MWind       = new MainWindow();
+    
     /**
      * @param args
      */
@@ -36,6 +40,7 @@ public class Main {
             final int UDPport = 2212;
             StartFTP(FTPport);
             StartUDP(UDPport);
+            MWind.setVisible(true);
         } catch (final IOException ex) {
             logger.error("UDP Start failed with error {}", ex.getMessage());
         } catch (final FtpException ex) {
@@ -57,8 +62,6 @@ public class Main {
         final UserManager um = userManagerFactory.createUserManager();
         um.save(MakeUser("field1", pass));
         um.save(MakeUser("field2", pass));
-        um.save(MakeUser("field3", pass));
-        um.save(MakeUser("field4", pass));
         return um;
     }
 
@@ -84,7 +87,11 @@ public class Main {
         logger.info("Listener Started!");
     }
 
-    public static void StopFTP() {
+    public static void Quit() {
+        logger.info("Stopping Services..");
         FTPserver.stop();
+        UDPserver.unbind();
+        logger.info("Done. Quitting!");
+        System.exit(0);
     }
 }

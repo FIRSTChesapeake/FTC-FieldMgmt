@@ -33,16 +33,17 @@ public class FCSMsg {
     public static final int MATCH_STATE_TELEOP_RUNNING      = 0x0011;
     public static final int MATCH_STATE_TELEOP_ENDED        = 0x0012;
     public static final int MATCH_STATE_ENDGAME_RUNNING     = 0x0020;
-    public static final int MATCH_STATE_ENDGAME_ENDED       = 0x0040;
+    public static final int MATCH_STATE_ENDGAME_ENDED       = 0x0040; 
+    
 
-    public static final int SplitBytes(final byte[] b, final int i) {
+    public static final int BuildDword(final byte[] b, final int i) {
         final byte[] bb = { b[i], b[i + 1], b[i + 2], b[i + 3] };
         final int ret = java.nio.ByteBuffer.wrap(bb).getInt();
         return ret;
     }
 
     public int   iMessageID;
-    public int   iKeyPart1;
+    public int   iKeyPart1;             // Using this field to identify the field number (1 or 2)
     public int   iKeyPart2;
     public int   iDivisionID;
     public int   iMatchType;
@@ -57,30 +58,30 @@ public class FCSMsg {
     public Robot B2;
 
     public FCSMsg(final byte[] D) {
-        iMessageID = SplitBytes(D, 0);
-        iKeyPart1 = SplitBytes(D, 4);
-        iKeyPart2 = SplitBytes(D, 8);
-        iDivisionID = SplitBytes(D, 12);
-        iMatchType = SplitBytes(D, 16);
-        iMatchConfig = SplitBytes(D, 20);
-        iMatchState = SplitBytes(D, 24);
-        iTimeRemaining = SplitBytes(D, 28);
-        iMatchNumber = SplitBytes(D, 32);
+        iMessageID      = BuildDword(D, 0);
+        iKeyPart1       = BuildDword(D, 4);
+        iKeyPart2       = BuildDword(D, 8);
+        iDivisionID     = BuildDword(D, 12);
+        iMatchType      = BuildDword(D, 16);
+        iMatchConfig    = BuildDword(D, 20);
+        iMatchState     = BuildDword(D, 24);
+        iTimeRemaining  = BuildDword(D, 28);
+        iMatchNumber    = BuildDword(D, 32);
 
-        R1 = new Robot(SplitBytes(D, 36), SplitBytes(D, 40));
-        R2 = new Robot(SplitBytes(D, 44), SplitBytes(D, 48));
-        B1 = new Robot(SplitBytes(D, 52), SplitBytes(D, 56));
-        B2 = new Robot(SplitBytes(D, 60), SplitBytes(D, 64));
+        R1 = new Robot(BuildDword(D, 36), BuildDword(D, 40));
+        R2 = new Robot(BuildDword(D, 44), BuildDword(D, 48));
+        B1 = new Robot(BuildDword(D, 52), BuildDword(D, 56));
+        B2 = new Robot(BuildDword(D, 60), BuildDword(D, 64));
     }
 
     public String MatchConfig() {
         switch (iMatchConfig) {
             case MATCH_CONFIG_AUTONOMOUS_ENABLED:
-                return "Autonomous";
+                return "AUTO";
             case MATCH_CONFIG_TELEOP_ENABLED:
-                return "Teleoperated";
+                return "TELE";
             case MATCH_CONFIG_ENDGAME_ENABLED:
-                return "Endgame";
+                return "ENDING";
             default:
                 return "Unknown?";
         }
@@ -88,21 +89,21 @@ public class FCSMsg {
 
     public String MatchState() {
         switch (iMatchState) {
-            case MATCH_STATE_AUTONOMOUS_WAITING: // 1
+            case MATCH_STATE_AUTONOMOUS_WAITING:    // 1
                 return "Waiting for Start";
-            case MATCH_STATE_AUTONOMOUS_RUNNING: // 2
+            case MATCH_STATE_AUTONOMOUS_RUNNING:    // 2
                 return "Auto Running";
-            case MATCH_STATE_AUTONOMOUS_ENDED: // Not Sent
+            case MATCH_STATE_AUTONOMOUS_ENDED:      // Not Sent
                 return "Auto End";
-            case MATCH_STATE_TELEOP_WAITING: // 3
+            case MATCH_STATE_TELEOP_WAITING:        // 3
                 return "Tele Waiting";
-            case MATCH_STATE_TELEOP_RUNNING: // 4
+            case MATCH_STATE_TELEOP_RUNNING:        // 4
                 return "Tele Running";
-            case MATCH_STATE_ENDGAME_RUNNING: // 5
+            case MATCH_STATE_ENDGAME_RUNNING:       // 5
                 return "Endgame";
-            case MATCH_STATE_TELEOP_ENDED: // Not Sent
+            case MATCH_STATE_TELEOP_ENDED:          // Not Sent
                 return "Tele End";
-            case MATCH_STATE_ENDGAME_ENDED: // 6
+            case MATCH_STATE_ENDGAME_ENDED:         // 6
                 return "Game End";
             default:
                 return "Unknown State = " + String.valueOf(iMatchState);
@@ -122,7 +123,7 @@ public class FCSMsg {
             case MATCH_TYPE_FINAL:
                 return "Final";
             default:
-                return "Unknown?";
+                return "Unknown Type = " + String.valueOf(iMatchType);
         }
     }
 
@@ -158,8 +159,15 @@ public class FCSMsg {
         }
     }
 
-    public String TimeReaminging() {
-        // TODO: Finish
-        return "";
+    public String TimeRemaining() {
+        int mins = 0;
+        int secs = iTimeRemaining/1000;
+        if(secs >= 60){
+            mins = secs / 60;
+            secs = secs % 60;
+        }
+        String m = String.format("%02d", mins);
+        String s = String.format("%02d", secs);
+        return String.valueOf(m+":"+s);
     }
 }

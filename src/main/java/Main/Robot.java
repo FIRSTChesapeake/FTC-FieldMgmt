@@ -1,9 +1,13 @@
 package Main;
 
 public class Robot {
-    public int TeamID;
-    public int Status;
+    public int TeamID = 0;
+    public int Status = 0;
 
+    public Robot(){
+        
+    }
+    
     public Robot(final int Team, final int Stat) {
         TeamID = Team;
         Status = Stat;

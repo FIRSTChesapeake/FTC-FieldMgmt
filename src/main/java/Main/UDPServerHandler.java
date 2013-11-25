@@ -20,7 +20,7 @@ public class UDPServerHandler extends IoHandlerAdapter {
 
     @Override
     public void exceptionCaught(final IoSession session, final Throwable cause) throws Exception {
-        logger.error("ERROR: {}", cause);
+        logger.error("ERROR: {}", cause.getClass()+" - "+cause.getMessage());
     }
 
     @Override
@@ -34,7 +34,8 @@ public class UDPServerHandler extends IoHandlerAdapter {
                 }
             }
             LastState = msg.iMatchState;
-            logger.info(msg.MatchState());
+            logger.info("Field "+String.valueOf(msg.iKeyPart1)+" says: "+msg.MatchState());
         }
+        Main.MWind.UpdateField(msg);
     }
 }
