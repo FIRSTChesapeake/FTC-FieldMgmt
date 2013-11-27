@@ -1,7 +1,7 @@
 /**
  * 
  */
-package Main;
+package MgrMain;
 
 /**
  * @author Matthew Glennon (mglennon@virginiafirst.org)

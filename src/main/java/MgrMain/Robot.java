@@ -1,4 +1,4 @@
-package Main;
+package MgrMain;
 
 public class Robot {
     public int TeamID = 0;

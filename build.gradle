@@ -27,4 +27,4 @@ dependencies {
 }
 
 // Main class name for Application Plugin to execute by default
-mainClassName = "Main.main"
+mainClassName = "MgrMain.Main"

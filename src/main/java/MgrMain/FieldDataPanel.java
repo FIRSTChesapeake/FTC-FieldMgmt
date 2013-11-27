@@ -1,4 +1,4 @@
-package Main;
+package MgrMain;
 
 import java.awt.Color;
 import java.awt.GridLayout;

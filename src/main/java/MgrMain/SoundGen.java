@@ -1,7 +1,7 @@
 /**
  * 
  */
-package Main;
+package MgrMain;
 
 import java.io.File;
 import java.io.FileNotFoundException;
