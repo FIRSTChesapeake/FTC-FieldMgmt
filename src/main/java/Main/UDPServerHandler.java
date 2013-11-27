@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  */
 public class UDPServerHandler extends IoHandlerAdapter {
     final public static Logger logger    = LoggerFactory.getLogger(Main.class);
-
+    
     private int                LastState = -1;
 
     @Override
@@ -30,6 +30,7 @@ public class UDPServerHandler extends IoHandlerAdapter {
         if (msg.iMatchState != LastState) {
             if (LastState != -1) {
                 if (!msg.SmoothMatch(LastState)) {
+                    SoundGen.playSound("FOGHORN");
                     logger.info("BAD MATCH!");
                 }
             }
