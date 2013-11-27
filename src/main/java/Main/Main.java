@@ -17,20 +17,18 @@ import org.apache.mina.transport.socket.nio.NioDatagramAcceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sun.java.swing.plaf.windows.resources.windows;
-
 /**
  * @author Matthew Glennon (mglennon@virginiafirst.org)
  *         https://github.com/VirginiaFIRST/FTC-FieldMgmt
  */
 public class Main {
 
-    final public static Logger              logger      = LoggerFactory.getLogger(Main.class);
-    private static      FtpServer           FTPserver;
-    private static      NioDatagramAcceptor UDPserver;
+    final public static Logger         logger = LoggerFactory.getLogger(Main.class);
+    private static FtpServer           FTPserver;
+    private static NioDatagramAcceptor UDPserver;
 
-    public static       MainWindow          MWind       = new MainWindow();
-    
+    public static MainWindow           MWind  = new MainWindow();
+
     /**
      * @param args
      */
@@ -55,6 +53,14 @@ public class Main {
         Buser.setPassword(password);
         Buser.setHomeDirectory("ftproot");
         return Buser;
+    }
+
+    public static void Quit() {
+        logger.info("Stopping Services..");
+        FTPserver.stop();
+        UDPserver.unbind();
+        logger.info("Done. Quitting!");
+        System.exit(0);
     }
 
     private static UserManager SetupPassword(final String pass) throws FtpException {
@@ -85,13 +91,5 @@ public class Main {
         final InetSocketAddress p = new InetSocketAddress(port);
         UDPserver.bind(p);
         logger.info("Listener Started!");
-    }
-
-    public static void Quit() {
-        logger.info("Stopping Services..");
-        FTPserver.stop();
-        UDPserver.unbind();
-        logger.info("Done. Quitting!");
-        System.exit(0);
     }
 }

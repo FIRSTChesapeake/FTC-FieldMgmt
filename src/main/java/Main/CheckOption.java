@@ -5,15 +5,16 @@ import java.awt.GridLayout;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class GenericDisplay extends JPanel {
+public class CheckOption extends JPanel {
 
     private class sTask extends TimerTask {
         @Override
         public void run() {
-            GenericDisplay.this.UnBlink();
+            CheckOption.this.UnBlink();
         }
     }
 
@@ -23,13 +24,14 @@ public class GenericDisplay extends JPanel {
     private static final long serialVersionUID = 1L;
     JLabel                    lbl              = new JLabel("Uninitialized");
 
-    JLabel                    val              = new JLabel("Uninitialized");
+    JCheckBox                 val              = new JCheckBox();
 
     private final Color       bg               = this.getBackground();
 
-    public GenericDisplay(final String name) {
+    public CheckOption(final String name, boolean StartValue) {
         lbl.setText(name);
         val.setOpaque(true);
+        val.setSelected(StartValue);
         this.setLayout(new GridLayout(0, 2, 0, 0));
         this.add(lbl);
         this.add(val);
@@ -45,21 +47,11 @@ public class GenericDisplay extends JPanel {
         this.setBackground(bg);
     }
 
-    public void UpdateDisplay(final int value) {
-        this.UpdateDisplay(value, this.getBackground());
+    public void SetValue(boolean value){
+        val.setSelected(value);
     }
-
-    public void UpdateDisplay(final int value, final Color clr) {
-        val.setText(String.valueOf(value));
-        val.setBackground(clr);
-    }
-
-    public void UpdateDisplay(final String value) {
-        this.UpdateDisplay(value, this.getBackground());
-    }
-
-    public void UpdateDisplay(final String value, final Color clr) {
-        val.setText(value);
-        val.setBackground(clr);
+    
+    public boolean GetValue(){
+        return val.isSelected();
     }
 }
