@@ -27,4 +27,4 @@ dependencies {
 }
 
 // Main class name for Application Plugin to execute by default
-mainClassName = "FTC-FieldMgmt.Main.Main"
+mainClassName = "Main.main"
