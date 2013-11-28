@@ -26,7 +26,6 @@ public class Main {
     final public static Logger         logger = LoggerFactory.getLogger(Main.class);
     private static FtpServer           FTPserver;
     private static NioDatagramAcceptor UDPserver;
-
     public static MainWindow           MWind  = new MainWindow();
 
     /**
@@ -34,11 +33,18 @@ public class Main {
      */
     public static void main(final String[] args) {
         try {
-            final int FTPport = 2211;
-            final int UDPport = 2212;
-            StartFTP(FTPport);
+        	// MAIN SETTINGS
+            final int 		FTPport 		= 2211;
+            final int 		UDPport 		= 2212;
+            final int 		fieldCount 		= 2;
+            final String 	FTPpass 		= "apple";
+            // END MAIN SETTINGS
+            
+            // Build Main Objects!
+            StartFTP(FTPport, FTPpass, fieldCount);
             StartUDP(UDPport);
             MWind.setVisible(true);
+            
         } catch (final IOException ex) {
             logger.error("UDP Start failed with error {}", ex.getMessage());
         } catch (final FtpException ex) {
@@ -56,28 +62,32 @@ public class Main {
     }
 
     public static void Quit() {
-        logger.info("Stopping Services..");
+        logger.info("Stopping FTP..");
         FTPserver.stop();
+        logger.info("Stopping UDP..");
         UDPserver.unbind();
         logger.info("Done. Quitting!");
         System.exit(0);
     }
 
-    private static UserManager SetupPassword(final String pass) throws FtpException {
-        final PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
+    private static UserManager SetupPassword(final String pass, final int fieldCount) throws FtpException {
+        logger.info("Creating FTP Users..");
+    	final PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
         final UserManager um = userManagerFactory.createUserManager();
-        um.save(MakeUser("field1", pass));
-        um.save(MakeUser("field2", pass));
+        for(int i=1;i!=fieldCount+1;i++){
+        	logger.info("FTP User #{} created!",i);
+        	um.save(MakeUser("field"+i, pass));
+        }
         return um;
     }
 
-    public static void StartFTP(final int FTPport) throws FtpException {
+    public static void StartFTP(final int FTPport, final String FTPPass, int fieldCount) throws FtpException {
         logger.info("Starting FTP Server on port {}", FTPport);
         final FtpServerFactory serverFactory = new FtpServerFactory();
         final ListenerFactory factory = new ListenerFactory();
         factory.setPort(FTPport);
         serverFactory.addListener("default", factory.createListener());
-        final UserManager um = SetupPassword("apple");
+        final UserManager um = SetupPassword(FTPPass,fieldCount);
         serverFactory.setUserManager(um);
         FTPserver = serverFactory.createServer();
         FTPserver.start();
