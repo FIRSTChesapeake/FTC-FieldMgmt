@@ -71,11 +71,11 @@ public class Main {
     }
 
     private static UserManager SetupPassword(final String pass, final int fieldCount) throws FtpException {
-        logger.info("Creating FTP Users..");
+        logger.info("Creating FTP Users with password '{}'..",pass);
     	final PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
         final UserManager um = userManagerFactory.createUserManager();
         for(int i=1;i!=fieldCount+1;i++){
-        	logger.info("FTP User #{} created!",i);
+        	logger.info("FTP User field{} created!",i);
         	um.save(MakeUser("field"+i, pass));
         }
         return um;
