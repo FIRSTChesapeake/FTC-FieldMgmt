@@ -1,7 +1,7 @@
 /**
  * 
  */
-package MgrMain;
+package SoundGenerator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,6 +16,8 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import MgrMain.Main;
+
 /**
  * @author Matthew Glennon (mglennon@virginiafirst.org)
  *         https://github.com/VirginiaFIRST/FTC-FieldMgmt
@@ -24,9 +26,9 @@ public class SoundGen {
 
     final public static Logger  logger  = LoggerFactory.getLogger(Main.class);
 
-    private static final String sPath   = "/Sound/";
-    private static final String sFormat = "wav";
-
+    protected static final String sPath   = "/Sound/";
+    protected static final String sFormat = "wav";
+    
     public static synchronized void playSound(final String inFile) {
         final Thread th = new Thread(new Runnable() {
             @Override

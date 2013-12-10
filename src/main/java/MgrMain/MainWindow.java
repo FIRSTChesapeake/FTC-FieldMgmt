@@ -4,13 +4,19 @@
 package MgrMain;
 
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import SoundGenerator.SoundGen;
+import SoundGenerator.SoundTestWindow;
 
 /**
  * @author Matthew Glennon (mglennon@virginiafirst.org)
@@ -38,6 +44,10 @@ public class MainWindow extends JFrame {
 
         this.getContentPane().add(Field1);
         this.getContentPane().add(Field2);
+        
+        final SoundTestWindow Testframe = new SoundTestWindow();
+        this.getContentPane().add(Testframe);
+        
         this.invalidate();
     }
 
