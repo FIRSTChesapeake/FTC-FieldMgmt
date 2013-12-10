@@ -52,37 +52,39 @@ public class FieldDataPanel extends JPanel {
         if (msg.iMatchState != LastState) {
             // If we're playing sounds at all..
             if (InitDone && PlaySounds.GetValue()) {
-                // FOG HORN
+                // FOG HORN - Disabling the check for the fog horn. I hate the damn horn anyway.
+                /*
                 if (!msg.SmoothMatch(LastState)) {
                     SoundGen.playSound("FOGHORN");
                     logger.info("BAD MATCH!");
                     a1.Blink(Color.red, 1000);
                 } else {
-                    // Generate the rest of the game sounds
-                    switch(msg.iMatchState){
-                        case FCSMsg.MATCH_STATE_AUTONOMOUS_WAITING:
-                            // Acceptable mode - but we play no sound
-                            break;
-                        case FCSMsg.MATCH_STATE_AUTONOMOUS_RUNNING:
-                            SoundGen.playSound("CHARGE");
-                            break;
-                        case FCSMsg.MATCH_STATE_TELEOP_WAITING:
-                            SoundGen.playSound("ENDAUTON");
-                            break;
-                        case FCSMsg.MATCH_STATE_TELEOP_RUNNING:
-                            SoundGen.playSound("3BELLS");
-                            break;
-                        case FCSMsg.MATCH_STATE_ENDGAME_RUNNING:
-                            SoundGen.playSound("WARNEOM");
-                            break;
-                        case FCSMsg.MATCH_STATE_ENDGAME_ENDED:
-                            SoundGen.playSound("ENDMATCH");
-                            break;
-                        default:
-                            logger.error("Unexpected Mode received in the FieldDataPanel class");
-                            break;
-                    }
+                 */
+                // Generate the rest of the game sounds
+                switch(msg.iMatchState){
+                    case FCSMsg.MATCH_STATE_AUTONOMOUS_WAITING:
+                        // Acceptable mode - but we play no sound
+                        break;
+                    case FCSMsg.MATCH_STATE_AUTONOMOUS_RUNNING:
+                        SoundGen.playSound("CHARGE");
+                        break;
+                    case FCSMsg.MATCH_STATE_TELEOP_WAITING:
+                        SoundGen.playSound("ENDAUTON");
+                        break;
+                    case FCSMsg.MATCH_STATE_TELEOP_RUNNING:
+                        SoundGen.playSound("3BELLS");
+                        break;
+                    case FCSMsg.MATCH_STATE_ENDGAME_RUNNING:
+                        SoundGen.playSound("WARNEOM");
+                        break;
+                    case FCSMsg.MATCH_STATE_ENDGAME_ENDED:
+                        SoundGen.playSound("ENDMATCH");
+                        break;
+                    default:
+                        logger.error("Unexpected Mode received in the FieldDataPanel class");
+                        break;
                 }
+                //}
             }
             LastState = msg.iMatchState;
             logger.info("Field " + String.valueOf(msg.iKeyPart1) + " says: " + msg.MatchState());
