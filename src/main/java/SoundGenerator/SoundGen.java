@@ -6,6 +6,7 @@ package SoundGenerator;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -29,7 +30,15 @@ public class SoundGen {
     protected static final String sPath   = "/Sound/";
     protected static final String sFormat = "wav";
     
-    public static synchronized void playSound(final String inFile) {
+    protected static ArrayList<Thread> threads = new ArrayList<Thread>();
+    
+    public static void StopAll(){
+        for(Thread th : threads){
+            th.interrupt();
+        }
+    }
+    
+    public static synchronized void playSound(final String inFile,final int loop) {
         final Thread th = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -40,7 +49,12 @@ public class SoundGen {
                     final File file = new File(fPath);
                     final AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
                     clip.open(inputStream);
-                    clip.start();
+                    if(loop == 0) clip.start();
+                    if(loop >  0) clip.loop(loop);
+                    // TODO: The thread doesn't loop here and wait!?
+                    while(clip.isRunning()){
+                        if(!Thread.currentThread().isInterrupted()) clip.stop();
+                    }
                 } catch (final LineUnavailableException e) {
                     logger.error("Audio Line Unavailable: {}", e.getMessage());
                 } catch (final FileNotFoundException e) {
@@ -52,9 +66,11 @@ public class SoundGen {
                 } catch (final IllegalArgumentException e) {
                     logger.error("Illegal Arguement: {}", e.getMessage());
                 }
+                logger.debug("Thread Complete");
             }
         });
         th.setName("SoundGen");
+        threads.add(th);
         th.start();
     }
 }

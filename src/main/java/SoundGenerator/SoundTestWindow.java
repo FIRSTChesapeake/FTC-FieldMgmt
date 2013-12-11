@@ -9,11 +9,13 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import MgrMain.CheckOption;
 import MgrMain.Main;
 
 /**
@@ -28,6 +30,8 @@ public class SoundTestWindow extends JPanel {
     private static final long serialVersionUID = 1L;
 
     final public static Logger logger = LoggerFactory.getLogger(Main.class);
+    
+    CheckOption loopChk = new CheckOption("Loop 5 times", false);
     
     public SoundTestWindow() {
         //this.setSize(1000, 500);
@@ -44,19 +48,37 @@ public class SoundTestWindow extends JPanel {
                     String filename = files.replace("."+SoundGen.sFormat, "");
                     logger.info("Buiding Test Btn: {}",filename);
                     JButton j = new JButton(filename);
-                    j.addActionListener(new BtnPress());
+                    j.addActionListener(new TestBtnPress());
                     this.add(j);
                 }
             }
         }
+        this.add(loopChk);
+        
+        JButton stop = new JButton("STOP");
+        stop.addActionListener(new StopBtnPress());
+        stop.setEnabled(false);
+        this.add(stop);
         this.invalidate();
     }
-    private class BtnPress implements ActionListener {
+    private class TestBtnPress implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             JButton j = (JButton)e.getSource();
-            logger.info("test Playing: {}",j.getText());
-            SoundGen.playSound(j.getText());
+            logger.info("Test Playing: {}",j.getText());
+            // TODO: Turn this into a number selection so user can choose how many times we loop.
+            int loop = 0;
+            if(loopChk.GetValue()) loop = 5; 
+            SoundGen.playSound(j.getText(),loop);
+        }
+        
+    }
+    private class StopBtnPress implements ActionListener {
+        @Override
+        // TODO: Actually make this work.
+        public void actionPerformed(ActionEvent e) {
+            logger.info("Stopping All Sound");
+            SoundGen.StopAll();
         }
         
     }

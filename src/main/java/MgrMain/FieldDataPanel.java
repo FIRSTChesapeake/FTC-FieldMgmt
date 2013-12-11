@@ -68,19 +68,19 @@ public class FieldDataPanel extends JPanel {
                         // Acceptable mode - but we play no sound
                         break;
                     case FCSMsg.MATCH_STATE_AUTONOMOUS_RUNNING:
-                        SoundGen.playSound("CHARGE");
+                        SoundGen.playSound("CHARGE", 0);
                         break;
                     case FCSMsg.MATCH_STATE_TELEOP_WAITING:
-                        SoundGen.playSound("ENDAUTON");
+                        SoundGen.playSound("ENDAUTON", 0);
                         break;
                     case FCSMsg.MATCH_STATE_TELEOP_RUNNING:
-                        SoundGen.playSound("3BELLS");
+                        SoundGen.playSound("3BELLS", 0);
                         break;
                     case FCSMsg.MATCH_STATE_ENDGAME_RUNNING:
-                        SoundGen.playSound("WARNEOM");
+                        SoundGen.playSound("WARNEOM", 0);
                         break;
                     case FCSMsg.MATCH_STATE_ENDGAME_ENDED:
-                        SoundGen.playSound("ENDMATCH");
+                        SoundGen.playSound("ENDMATCH", 0);
                         break;
                     default:
                         logger.error("Unexpected Mode received in the FieldDataPanel class");
