@@ -31,6 +31,8 @@ public class FieldDataPanel extends JPanel {
     private int                  LastState        = -1;
     private boolean              InitDone         = false;
     private int                  LastMatch        = 0;
+    
+    private String               LastIP           = "None";
 
     public FieldDataPanel() {
         this.setLayout(new GridLayout(0, 1, 0, 0));
@@ -45,10 +47,11 @@ public class FieldDataPanel extends JPanel {
     }
 
     public void SetStatus(String value, Color clr){
-        a6.UpdateDisplay(value, clr);
+        a6.UpdateDisplay(value+" - ("+LastIP+")", clr);
     }
     
     public void UpdateField(final FCSMsg msg) {
+        LastIP = msg.RemoteIP;
         a1.UpdateDisplay(msg.iKeyPart1);
         a2.UpdateDisplay(msg.MatchType());
 

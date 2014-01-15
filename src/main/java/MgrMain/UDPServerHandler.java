@@ -3,6 +3,8 @@
  */
 package MgrMain;
 
+import java.net.SocketAddress;
+
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IoSession;
@@ -24,7 +26,9 @@ public class UDPServerHandler extends IoHandlerAdapter {
     @Override
     public void messageReceived(final IoSession session, final Object message) throws Exception {
         final byte[] by = ((IoBuffer) message).array();
-        final FCSMsg msg = new FCSMsg(by);
+        final SocketAddress RemoteIP = session.getRemoteAddress();
+        final String StrAddress = RemoteIP.toString();
+        final FCSMsg msg = new FCSMsg(by,StrAddress);
         Main.MWind.UpdateField(msg);
     }
 }

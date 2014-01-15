@@ -51,13 +51,15 @@ public class FCSMsg {
     public int   iMatchState;
     public int   iTimeRemaining;
     public int   iMatchNumber;
+    
+    public String RemoteIP;
 
     public Robot R1;
     public Robot R2;
     public Robot B1;
     public Robot B2;
 
-    public FCSMsg(final byte[] D) {
+    public FCSMsg(final byte[] D, String inRemoteIP) {
         iMessageID = BuildDword(D, 0);
         iKeyPart1 = BuildDword(D, 4);
         iKeyPart2 = BuildDword(D, 8);
@@ -67,7 +69,9 @@ public class FCSMsg {
         iMatchState = BuildDword(D, 24);
         iTimeRemaining = BuildDword(D, 28);
         iMatchNumber = BuildDword(D, 32);
-
+        
+        RemoteIP = inRemoteIP;
+        
         R1 = new Robot(BuildDword(D, 36), BuildDword(D, 40));
         R2 = new Robot(BuildDword(D, 44), BuildDword(D, 48));
         B1 = new Robot(BuildDword(D, 52), BuildDword(D, 56));
