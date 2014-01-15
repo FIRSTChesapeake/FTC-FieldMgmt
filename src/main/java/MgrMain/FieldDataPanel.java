@@ -29,6 +29,7 @@ public class FieldDataPanel extends JPanel {
 
     private int                  LastState        = -1;
     private boolean              InitDone         = false;
+    private int                  LastMatch        = 0;
 
     public FieldDataPanel() {
         this.setLayout(new GridLayout(0, 1, 0, 0));
@@ -45,10 +46,14 @@ public class FieldDataPanel extends JPanel {
         a1.UpdateDisplay(msg.iKeyPart1);
         a2.UpdateDisplay(msg.MatchType());
 
-        Color StateColor = Color.yellow;
+        Color StateColor = Color.BLUE;
 
         if (msg.iMatchState != FCSMsg.MATCH_STATE_AUTONOMOUS_WAITING) {
             StateColor = Color.green;
+            LastMatch = msg.iMatchNumber;
+        } else {
+            if(LastMatch < msg.iMatchNumber)  StateColor = Color.yellow;
+            if(LastMatch == msg.iMatchNumber) StateColor = Color.red;
         }
 
         if (msg.iMatchState != LastState) {
