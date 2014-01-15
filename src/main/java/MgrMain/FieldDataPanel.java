@@ -24,6 +24,7 @@ public class FieldDataPanel extends JPanel {
     private final GenericDisplay a3               = new GenericDisplay("Match State");
     private final GenericDisplay a4               = new GenericDisplay("Time Remaining");
     private final GenericDisplay a5               = new GenericDisplay("Match Number");
+    private final GenericDisplay a6               = new GenericDisplay("Comm Status");
     
     private final CheckOption    PlaySounds       = new CheckOption("Play Sounds",true);
 
@@ -38,10 +39,15 @@ public class FieldDataPanel extends JPanel {
         this.add(a3);
         this.add(a4);
         this.add(a5);
+        this.add(a6);
         
         this.add(PlaySounds);
     }
 
+    public void SetStatus(String value, Color clr){
+        a6.UpdateDisplay(value, clr);
+    }
+    
     public void UpdateField(final FCSMsg msg) {
         a1.UpdateDisplay(msg.iKeyPart1);
         a2.UpdateDisplay(msg.MatchType());
