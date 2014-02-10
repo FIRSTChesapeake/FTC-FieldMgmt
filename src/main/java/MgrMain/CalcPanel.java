@@ -3,6 +3,8 @@
  */
 package MgrMain;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +16,7 @@ import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -32,20 +35,31 @@ public class CalcPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private JLabel mainlbl = new JLabel("");
     
-    private final CheckOption isEnabled     = new CheckOption("Enable Timer", false);
-    private final JPanel      blank         = new JPanel();
+    private CheckOption isEnabled     = new CheckOption("Enable Timer", false);
+    private JPanel      blank         = new JPanel();
     
-    private final NumericDisplay CycleTime  = new NumericDisplay("Cycle Time",6,4,10,1);
-    private final NumericDisplay MatchCount = new NumericDisplay("Match Count",33,1,100,1);
+    private NumericDisplay CycleTime  = new NumericDisplay("Cycle Time",6,4,10,1);
+    private NumericDisplay MatchCount = new NumericDisplay("Match Count",33,1,100,1);
     
-    private final DateDisplay DayStart      = new DateDisplay("Day Start",11,0);
-    private final DateDisplay LunchStart    = new DateDisplay("Lunch Start", 12,0);
-    private final DateDisplay LunchEnd      = new DateDisplay("Lunch End", 12,5);
-    private final DateDisplay DayEnd        = new DateDisplay("Day End", 15,0);
+    private DateDisplay DayStart      = new DateDisplay("Day Start",11,0);
+    private DateDisplay LunchStart    = new DateDisplay("Lunch Start", 12,0);
+    private DateDisplay LunchEnd      = new DateDisplay("Lunch End", 12,5);
+    private DateDisplay DayEnd        = new DateDisplay("Day End", 15,0);
+    
+    private Timer             TickTime         = new Timer(); 
     
     private boolean initDone = false;
     
+    private int LastMatch = 0;
+    
     public CalcPanel(){
+        TickTime.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                CalcTime(LastMatch);
+            }
+        }, 1000, 10000);
+        
         this.setLayout(new GridLayout(0, 2, 0, 0));
         isEnabled.addActionListener(new EnableClicked());
         
@@ -67,6 +81,7 @@ public class CalcPanel extends JPanel {
             return false;
         }
         logger.info("Schedule Update Requested..");
+        LastMatch = CurrentMatch;
         int i = 0;
         final int MatchCnt = MatchCount.getValue();
         final int CycleTm = CycleTime.getValue();
@@ -108,12 +123,18 @@ public class CalcPanel extends JPanel {
             logger.info("Off schedule: {}", Offset);
             mainlbl.setText("Schedule offset: " + String.valueOf(Offset));
             return true;
+        } catch (IndexOutOfBoundsException e){
+            logger.error("FCS Sent Match Number that we aren't aware of.. We'll just wait to see what happens next time.");
+            mainlbl.setText("Unavailable. Match ID too high!");
+            return true;
         } catch (ParseException e) {
             logger.error("Scheduler Parser Exception");
-            return false;
+            mainlbl.setText("Unavailable. Parse Failed!");
+            return true;
         } catch (NullPointerException e) {
             logger.error("Scheduler Null Exception");
-            return false;
+            mainlbl.setText("Unavailable. Null Pointer?");
+            return true;
         }
     }
     private String timeDiff(Date Date1, Date Date2){
