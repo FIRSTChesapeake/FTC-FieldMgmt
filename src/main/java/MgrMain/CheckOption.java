@@ -2,6 +2,7 @@ package MgrMain;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.ActionListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -37,6 +38,10 @@ public class CheckOption extends JPanel {
         this.add(val);
     }
 
+    public void addActionListener(ActionListener l){
+        val.addActionListener(l);
+    }
+    
     public void Blink(final Color clr, final int delay) {
         this.setBackground(clr);
         final Timer timer = new Timer();

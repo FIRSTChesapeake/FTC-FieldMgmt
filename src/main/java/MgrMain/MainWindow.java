@@ -4,18 +4,14 @@
 package MgrMain;
 
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import SoundGenerator.SoundGen;
 import SoundGenerator.SoundTestWindow;
 
 /**
@@ -30,6 +26,10 @@ public class MainWindow extends JFrame {
     private final Field       Field1           = new Field(1);
     private final Field       Field2           = new Field(2);
 
+    private final TimingPanel clock            = new TimingPanel();
+    
+    private int LastMatch = 0;
+    
     public MainWindow() {
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -48,6 +48,8 @@ public class MainWindow extends JFrame {
         final SoundTestWindow Testframe = new SoundTestWindow();
         this.getContentPane().add(Testframe);
         
+        this.getContentPane().add(clock);
+        
         this.invalidate();
     }
 
@@ -58,6 +60,12 @@ public class MainWindow extends JFrame {
         if (msg.iKeyPart1 == 2) {
             Field2.UpdateField(msg);
         }
+        if(msg.iMatchNumber != LastMatch){
+            if(clock.UpdateSchedule(msg.iMatchNumber)) {
+                LastMatch = msg.iMatchNumber;
+            }
+        }
+        
         Field1.repaint();
         Field2.repaint();
     }
