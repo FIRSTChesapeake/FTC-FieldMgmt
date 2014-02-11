@@ -17,6 +17,8 @@ import org.apache.mina.transport.socket.nio.NioDatagramAcceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import MyTCPServer.TCPSvr;
+
 /**
  * @author Matthew Glennon (mglennon@virginiafirst.org)
  *         https://github.com/VirginiaFIRST/FTC-FieldMgmt
@@ -26,6 +28,7 @@ public class Main {
     final public static Logger         logger = LoggerFactory.getLogger(Main.class);
     private static FtpServer           FTPserver;
     private static NioDatagramAcceptor UDPserver;
+    private static TCPSvr              CLIserver;
     public static MainWindow           MWind  = new MainWindow();
 
     /**
@@ -36,6 +39,7 @@ public class Main {
             // MAIN SETTINGS
             final int FTPport = 2211;
             final int UDPport = 2212;
+            final int CLIPort = 2213;
             final int fieldCount = 2;
             final String FTPpass = "apple";
             // END MAIN SETTINGS
@@ -43,10 +47,12 @@ public class Main {
             // Build Main Objects!
             StartFTP(FTPport, FTPpass, fieldCount);
             StartUDP(UDPport);
+            StartCLI(CLIPort);
+            
             MWind.setVisible(true);
 
         } catch (final IOException ex) {
-            logger.error("UDP Start failed with error {}", ex.getMessage());
+            logger.error("UDP/CLI Start failed with error {}", ex.getMessage());
         } catch (final FtpException ex) {
             logger.info("FTP Start failed with error {}", ex.getMessage());
         }
@@ -66,6 +72,8 @@ public class Main {
         FTPserver.stop();
         logger.info("Stopping UDP..");
         UDPserver.unbind();
+        logger.info("Stopping CLI..");
+        CLIserver.abort();
         logger.info("Done. Quitting!");
         System.exit(0);
     }
@@ -101,5 +109,10 @@ public class Main {
         final InetSocketAddress p = new InetSocketAddress(port);
         UDPserver.bind(p);
         logger.info("Listener Started!");
+    }
+    private static void StartCLI(final int port) {
+        logger.info("Starting CLI Server on port {}", port);
+        CLIserver = new TCPSvr(port);
+        logger.info("CLI Server Started!");
     }
 }
