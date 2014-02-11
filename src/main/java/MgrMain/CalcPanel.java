@@ -71,16 +71,15 @@ public class CalcPanel extends JPanel {
     private final CheckOption    chkDebug         = new CheckOption("Enable Debug Output", false);
 
     private final CheckOption    chkAuto          = new CheckOption("Refresh on Timer", false);
-    private final JPanel         blank            = new JPanel();
-
+    private final JPanel         blank1            = new JPanel();
+    private final JPanel         blank2            = new JPanel();
+    
     private final NumericDisplay CycleTime        = new NumericDisplay("Cycle Time", 6, 4, 10, 1);
     private final NumericDisplay MatchCount       = new NumericDisplay("Match Count", 33, 1, 100, 1);
     private final DateDisplay    DayStart         = new DateDisplay("Day Start", 11, 0, TZ);
     private final DateDisplay    LunchStart       = new DateDisplay("Lunch Start", 12, 0, TZ);
-
     private final DateDisplay    LunchEnd         = new DateDisplay("Lunch End", 12, 30, TZ);
 
-    private final DateDisplay    DayEnd           = new DateDisplay("Day End", 15, 0, TZ);
 
     private final Timer          TickTime         = new Timer();
 
@@ -105,13 +104,13 @@ public class CalcPanel extends JPanel {
         mainlbl.setOpaque(true);
 
         this.add(chkEnabled);
-        this.add(blank);
+        this.add(blank1);
         this.add(chkAuto);
         this.add(chkDebug);
         this.add(CycleTime);
         this.add(MatchCount);
         this.add(DayStart);
-        this.add(DayEnd);
+        this.add(blank2);
         this.add(LunchStart);
         this.add(LunchEnd);
         this.add(mainlbl);
