@@ -13,34 +13,36 @@ import javax.swing.SpinnerNumberModel;
 
 /**
  * @author Matthew Glennon (mglennon@virginiafirst.org)
- * https://github.com/VirginiaFIRST/FTC-FieldMgmt
+ *         https://github.com/VirginiaFIRST/FTC-FieldMgmt
  */
 public class NumericDisplay extends JPanel {
 
     /**
      * 
      */
-    private final JLabel                        lbl              = new JLabel("Uninitialized");
+    private final JLabel      lbl              = new JLabel("Uninitialized");
 
-    private SpinnerModel Model = null;
-    private JSpinner val = null;
-    
+    private SpinnerModel      Model            = null;
+    private JSpinner          val              = null;
+
     private static final long serialVersionUID = 1L;
 
-    public NumericDisplay(String name, int Value, int Min, int Max, int Step){
+    public NumericDisplay(final String name, final int Value, final int Min, final int Max, final int Step) {
         lbl.setText(name);
-        Model = new SpinnerNumberModel(Value,Min,Max,Step);
+        Model = new SpinnerNumberModel(Value, Min, Max, Step);
         val = new JSpinner(Model);
         val.setOpaque(true);
         this.setLayout(new GridLayout(0, 2, 0, 0));
         this.add(lbl);
         this.add(val);
     }
-    public int getValue(){
+
+    public int getValue() {
         return (int) val.getValue();
     }
-    public void setValue(double value){
+
+    public void setValue(final double value) {
         val.setValue(value);
     }
-    
+
 }

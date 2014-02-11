@@ -25,13 +25,13 @@ public class FieldDataPanel extends JPanel {
     private final GenericDisplay a4               = new GenericDisplay("Time Remaining");
     private final GenericDisplay a5               = new GenericDisplay("Match Number");
     private final GenericDisplay a6               = new GenericDisplay("Comm Status");
-    
-    private final CheckOption    PlaySounds       = new CheckOption("Play Sounds",true);
+
+    private final CheckOption    PlaySounds       = new CheckOption("Play Sounds", true);
 
     private int                  LastState        = -1;
     private boolean              InitDone         = false;
     private int                  LastMatch        = 0;
-    
+
     private String               LastIP           = "None";
 
     public FieldDataPanel() {
@@ -42,14 +42,14 @@ public class FieldDataPanel extends JPanel {
         this.add(a4);
         this.add(a5);
         this.add(a6);
-        
+
         this.add(PlaySounds);
     }
 
-    public void SetStatus(String value, Color clr){
-        a6.UpdateDisplay(value+" - ("+LastIP+")", clr);
+    public void SetStatus(final String value, final Color clr) {
+        a6.UpdateDisplay(value + " - (" + LastIP + ")", clr);
     }
-    
+
     public void UpdateField(final FCSMsg msg) {
         LastIP = msg.RemoteIP;
         a1.UpdateDisplay(msg.iKeyPart1);
@@ -61,23 +61,28 @@ public class FieldDataPanel extends JPanel {
             StateColor = Color.green;
             LastMatch = msg.iMatchNumber;
         } else {
-            if(LastMatch < msg.iMatchNumber)  StateColor = Color.yellow;
-            if(LastMatch == msg.iMatchNumber) StateColor = Color.red;
+            if (LastMatch < msg.iMatchNumber) {
+                StateColor = Color.yellow;
+            }
+            if (LastMatch == msg.iMatchNumber) {
+                StateColor = Color.red;
+            }
         }
 
         if (msg.iMatchState != LastState) {
             // If we're playing sounds at all..
             if (InitDone && PlaySounds.GetValue()) {
-                // FOG HORN - Disabling the check for the fog horn. I hate the damn horn anyway.
+                // FOG HORN - Disabling the check for the fog horn. I hate the
+                // damn horn anyway.
                 /*
-                if (!msg.SmoothMatch(LastState)) {
-                    SoundGen.playSound("FOGHORN");
-                    logger.info("BAD MATCH!");
-                    a1.Blink(Color.red, 1000);
-                } else {
+                 * if (!msg.SmoothMatch(LastState)) {
+                 * SoundGen.playSound("FOGHORN");
+                 * logger.info("BAD MATCH!");
+                 * a1.Blink(Color.red, 1000);
+                 * } else {
                  */
                 // Generate the rest of the game sounds
-                switch(msg.iMatchState){
+                switch (msg.iMatchState) {
                     case FCSMsg.MATCH_STATE_AUTONOMOUS_WAITING:
                         // Acceptable mode - but we play no sound
                         break;
@@ -100,7 +105,7 @@ public class FieldDataPanel extends JPanel {
                         logger.error("Unexpected Mode received in the FieldDataPanel class");
                         break;
                 }
-                //}
+                // }
             }
             LastState = msg.iMatchState;
             logger.info("Field " + String.valueOf(msg.iKeyPart1) + " says: " + msg.MatchState());

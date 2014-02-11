@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @author Matthew Glennon (mglennon@virginiafirst.org)
- * https://github.com/VirginiaFIRST/FTC-FieldMgmt
+ *         https://github.com/VirginiaFIRST/FTC-FieldMgmt
  */
 public class TimingPanel extends JPanel {
     final Logger              logger           = LoggerFactory.getLogger(Main.class);
@@ -20,21 +20,24 @@ public class TimingPanel extends JPanel {
      * 
      */
     private static final long serialVersionUID = 1L;
+
+    public static void main(final String[] args) {
+
+    }
+
     /**
      * @param args
      */
     private final StandardClock clock = new StandardClock();
-    private final CalcPanel timer = new CalcPanel();
-    public static void main(String[] args) {
-        
-    }
-    public TimingPanel(){
+    private final CalcPanel     timer = new CalcPanel();
+
+    public TimingPanel() {
         this.setLayout(new GridLayout(0, 1, 0, 0));
         this.add(clock);
         this.add(timer);
     }
 
-    public boolean UpdateSchedule(int CurrentMatch){
+    public boolean UpdateSchedule(final int CurrentMatch) {
         return timer.CalcTime(CurrentMatch);
     }
 }

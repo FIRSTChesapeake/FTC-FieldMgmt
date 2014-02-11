@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 
 /**
  * @author Matthew Glennon (mglennon@virginiafirst.org)
- * https://github.com/VirginiaFIRST/FTC-FieldMgmt
+ *         https://github.com/VirginiaFIRST/FTC-FieldMgmt
  */
 public class StandardClock extends JPanel {
 
@@ -28,11 +28,11 @@ public class StandardClock extends JPanel {
     /**
      * @param args
      */
-    private JLabel            lbl              = new JLabel("");
-    private Timer             TickTime         = new Timer();
+    private final JLabel      lbl              = new JLabel("");
+    private final Timer       TickTime         = new Timer();
     private final DateFormat  df               = new SimpleDateFormat("HH:mm:ss");
-    
-    public StandardClock(){
+
+    public StandardClock() {
         this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         lbl.setFont(lbl.getFont().deriveFont(64.0f));
         this.add(lbl, BorderLayout.CENTER);
@@ -40,8 +40,8 @@ public class StandardClock extends JPanel {
         TickTime.schedule(new TimerTask() {
             @Override
             public void run() {
-                Date now = new Date();
-                String out = df.format(now);
+                final Date now = new Date();
+                final String out = df.format(now);
                 lbl.setText(out);
             }
         }, 1000, 1000);

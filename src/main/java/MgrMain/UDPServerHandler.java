@@ -28,7 +28,7 @@ public class UDPServerHandler extends IoHandlerAdapter {
         final byte[] by = ((IoBuffer) message).array();
         final SocketAddress RemoteIP = session.getRemoteAddress();
         final String StrAddress = RemoteIP.toString();
-        final FCSMsg msg = new FCSMsg(by,StrAddress);
+        final FCSMsg msg = new FCSMsg(by, StrAddress);
         Main.MWind.UpdateField(msg);
     }
 }

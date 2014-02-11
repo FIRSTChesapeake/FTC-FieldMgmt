@@ -27,9 +27,9 @@ public class MainWindow extends JFrame {
     private final Field       Field2           = new Field(2);
 
     private final TimingPanel clock            = new TimingPanel();
-    
-    private int LastMatch = 0;
-    
+
+    private int               LastMatch        = 0;
+
     public MainWindow() {
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -44,12 +44,12 @@ public class MainWindow extends JFrame {
 
         this.getContentPane().add(Field1);
         this.getContentPane().add(Field2);
-        
+
         final SoundTestWindow Testframe = new SoundTestWindow();
         this.getContentPane().add(Testframe);
-        
+
         this.getContentPane().add(clock);
-        
+
         this.invalidate();
     }
 
@@ -60,12 +60,12 @@ public class MainWindow extends JFrame {
         if (msg.iKeyPart1 == 2) {
             Field2.UpdateField(msg);
         }
-        if(msg.iMatchNumber != LastMatch){
-            if(clock.UpdateSchedule(msg.iMatchNumber)) {
+        if (msg.iMatchNumber != LastMatch) {
+            if (clock.UpdateSchedule(msg.iMatchNumber)) {
                 LastMatch = msg.iMatchNumber;
             }
         }
-        
+
         Field1.repaint();
         Field2.repaint();
     }

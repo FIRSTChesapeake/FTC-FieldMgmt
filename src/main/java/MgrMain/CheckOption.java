@@ -29,7 +29,7 @@ public class CheckOption extends JPanel {
 
     private final Color       bg               = this.getBackground();
 
-    public CheckOption(final String name, boolean StartValue) {
+    public CheckOption(final String name, final boolean StartValue) {
         lbl.setText(name);
         val.setOpaque(true);
         val.setSelected(StartValue);
@@ -38,25 +38,25 @@ public class CheckOption extends JPanel {
         this.add(val);
     }
 
-    public void addActionListener(ActionListener l){
+    public void addActionListener(final ActionListener l) {
         val.addActionListener(l);
     }
-    
+
     public void Blink(final Color clr, final int delay) {
         this.setBackground(clr);
         final Timer timer = new Timer();
         timer.schedule(new sTask(), delay);
     }
 
-    private void UnBlink() {
-        this.setBackground(bg);
+    public boolean GetValue() {
+        return val.isSelected();
     }
 
-    public void SetValue(boolean value){
+    public void SetValue(final boolean value) {
         val.setSelected(value);
     }
-    
-    public boolean GetValue(){
-        return val.isSelected();
+
+    private void UnBlink() {
+        this.setBackground(bg);
     }
 }

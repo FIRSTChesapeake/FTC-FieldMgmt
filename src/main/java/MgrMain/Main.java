@@ -33,18 +33,18 @@ public class Main {
      */
     public static void main(final String[] args) {
         try {
-        	// MAIN SETTINGS
-            final int 		FTPport 		= 2211;
-            final int 		UDPport 		= 2212;
-            final int 		fieldCount 		= 2;
-            final String 	FTPpass 		= "apple";
+            // MAIN SETTINGS
+            final int FTPport = 2211;
+            final int UDPport = 2212;
+            final int fieldCount = 2;
+            final String FTPpass = "apple";
             // END MAIN SETTINGS
-            
+
             // Build Main Objects!
             StartFTP(FTPport, FTPpass, fieldCount);
             StartUDP(UDPport);
             MWind.setVisible(true);
-            
+
         } catch (final IOException ex) {
             logger.error("UDP Start failed with error {}", ex.getMessage());
         } catch (final FtpException ex) {
@@ -71,23 +71,23 @@ public class Main {
     }
 
     private static UserManager SetupPassword(final String pass, final int fieldCount) throws FtpException {
-        logger.info("Creating FTP Users with password '{}'..",pass);
-    	final PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
+        logger.info("Creating FTP Users with password '{}'..", pass);
+        final PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
         final UserManager um = userManagerFactory.createUserManager();
-        for(int i=1;i!=fieldCount+1;i++){
-        	logger.info("FTP User field{} created!",i);
-        	um.save(MakeUser("field"+i, pass));
+        for (int i = 1; i != fieldCount + 1; i++) {
+            logger.info("FTP User field{} created!", i);
+            um.save(MakeUser("field" + i, pass));
         }
         return um;
     }
 
-    public static void StartFTP(final int FTPport, final String FTPPass, int fieldCount) throws FtpException {
+    public static void StartFTP(final int FTPport, final String FTPPass, final int fieldCount) throws FtpException {
         logger.info("Starting FTP Server on port {}", FTPport);
         final FtpServerFactory serverFactory = new FtpServerFactory();
         final ListenerFactory factory = new ListenerFactory();
         factory.setPort(FTPport);
         serverFactory.addListener("default", factory.createListener());
-        final UserManager um = SetupPassword(FTPPass,fieldCount);
+        final UserManager um = SetupPassword(FTPPass, fieldCount);
         serverFactory.setUserManager(um);
         FTPserver = serverFactory.createServer();
         FTPserver.start();

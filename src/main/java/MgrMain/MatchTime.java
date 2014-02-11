@@ -10,10 +10,10 @@ package MgrMain;
 import java.util.Date;
 
 public class MatchTime {
-    public int MatchID = 0;
+    public int  MatchID    = 0;
     public Date MatchStart = new Date();
-    
-    public MatchTime(int id, Date start){
+
+    public MatchTime(final int id, final Date start) {
         MatchID = id;
         MatchStart = start;
     }
