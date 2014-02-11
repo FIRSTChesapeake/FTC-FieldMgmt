@@ -167,15 +167,12 @@ public class CalcPanel extends JPanel {
             }
             for (i = 0; i < MatchCnt; i++) {
                 final Calendar cal = Calendar.getInstance();
-                // TODO: Make this selectable.
                 cal.setTimeZone(TimeZone.getTimeZone(TZ));
                 cal.setTime(LastTime);
-                // If this is the first match, subtract the cycle time from
-                // start so it starts ASAP.
-                if (i == 0) {
-                    cal.add(Calendar.MINUTE, (CycleTm * -1));
+                // If this is the first match, don't add the cycle time.
+                if (i != 0) {
+                    cal.add(Calendar.MINUTE, CycleTm);
                 }
-                cal.add(Calendar.MINUTE, CycleTm);
                 LastTime = cal.getTime();
                 // If we're in lunch, do it after
                 if (LastTime.after(LStart) && LastTime.before(LEnd)) {

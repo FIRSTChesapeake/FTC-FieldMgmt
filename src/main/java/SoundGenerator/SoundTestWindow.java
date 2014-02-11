@@ -10,6 +10,9 @@ import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,13 +41,7 @@ public class SoundTestWindow extends JPanel {
         public void actionPerformed(final ActionEvent e) {
             final JButton j = (JButton) e.getSource();
             logger.info("Test Playing: {}", j.getText());
-            // TODO: Turn this into a number selection so user can choose how
-            // many times we loop.
-            int loop = 0;
-            if (loopChk.GetValue()) {
-                loop = 5;
-            }
-            SoundGen.playSound(j.getText(), loop);
+            SoundGen.playSound(j.getText(), (int) loopCount.getValue());
         }
 
     }
@@ -55,7 +52,8 @@ public class SoundTestWindow extends JPanel {
     private static final long  serialVersionUID = 1L;
 
     final public static Logger logger           = LoggerFactory.getLogger(Main.class);
-    CheckOption                loopChk          = new CheckOption("Loop 5 times", false);
+    final private SpinnerModel Model = new SpinnerNumberModel(1,1,10,1);
+    final private JSpinner loopCount = new JSpinner(Model);
 
     public SoundTestWindow() {
         // this.setSize(1000, 500);
@@ -77,7 +75,7 @@ public class SoundTestWindow extends JPanel {
                 }
             }
         }
-        this.add(loopChk);
+        this.add(loopCount);
 
         final JButton stop = new JButton("STOP");
         stop.addActionListener(new StopBtnPress());
