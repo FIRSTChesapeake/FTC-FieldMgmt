@@ -17,6 +17,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -35,7 +36,7 @@ public class CalcPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private JLabel mainlbl = new JLabel("");
     
-    private CheckOption isEnabled     = new CheckOption("Enable Timer", false);
+    private CheckOption chkEnabled     = new CheckOption("Enable Timer", false);
     private JPanel      blank         = new JPanel();
     
     private NumericDisplay CycleTime  = new NumericDisplay("Cycle Time",6,4,10,1);
@@ -61,9 +62,8 @@ public class CalcPanel extends JPanel {
         }, 1000, 10000);
         
         this.setLayout(new GridLayout(0, 2, 0, 0));
-        isEnabled.addActionListener(new EnableClicked());
         
-        this.add(isEnabled);
+        this.add(chkEnabled);
         this.add(blank);
         this.add(CycleTime);
         this.add(MatchCount);
@@ -79,6 +79,10 @@ public class CalcPanel extends JPanel {
         if (!initDone) {
             logger.info("Scheduler Waiting for Window to be ready..");
             return false;
+        }
+        if(!chkEnabled.GetValue()){
+            // Skip the calc.. we're disabled.
+            return true;
         }
         logger.info("Schedule Update Requested..");
         LastMatch = CurrentMatch;
@@ -148,21 +152,5 @@ public class CalcPanel extends JPanel {
         }
         str = hours+":"+mins;
         return str;
-    }
-    private class EnableClicked implements ActionListener {
-        @Override
-        // TODO: Actually make this work.
-        public void actionPerformed(ActionEvent e) {
-            CheckOption j = (CheckOption) e.getSource();
-            boolean v = j.GetValue();
-            CycleTime.setEnabled(v);
-            MatchCount.setEnabled(v);
-            DayStart.setEnabled(v);
-            DayEnd.setEnabled(v);
-            LunchStart.setEnabled(v);
-            LunchEnd.setEnabled(v);
-            
-        }
-        
     }
 }
