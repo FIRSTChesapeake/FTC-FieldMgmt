@@ -43,7 +43,7 @@ public class Field extends JPanel {
         TickTime.schedule(new TimerTask() {
             @Override
             public void run() {
-                if ((System.currentTimeMillis() - LastHeard) > DeadDelay * 1000) {
+                if (System.currentTimeMillis() - LastHeard > DeadDelay * 1000) {
                     // We're Dead
                     DataPanel.SetStatus("Offline!", Color.red);
                 } else {

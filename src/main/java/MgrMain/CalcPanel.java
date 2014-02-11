@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -25,37 +26,8 @@ import org.slf4j.LoggerFactory;
  *         https://github.com/VirginiaFIRST/FTC-FieldMgmt
  */
 public class CalcPanel extends JPanel {
-    protected class BtnPress implements ActionListener {
-        @Override
-        public void actionPerformed(final ActionEvent e) {
-            final Object obj = e.getSource();
-            final JButton b = (JButton) obj;
-            if (b.equals(btnRefresh)) {
-                CalcPanel.this.CalcTime(LastMatch);
-            }
-        }
-
-    }
-
-    protected class OffsetAnswer {
-        public int     intHours = 0;
-        public int     intMins  = 0;
-        public String  strText  = "";
-        public boolean isNeg    = false;
-
-        public OffsetAnswer() {
-
-        }
-
-        public OffsetAnswer(final int iHours, final int iMins, final String iText, final boolean iNeg) {
-            intHours = iHours;
-            intMins = iMins;
-            strText = iText;
-            isNeg = iNeg;
-        }
-    }
-
     final Logger                 logger           = LoggerFactory.getLogger(Main.class);
+
     /**
      * 
      */
@@ -63,26 +35,24 @@ public class CalcPanel extends JPanel {
 
     // TODO: Make this adjustable
     private final String         TZ               = "EST";
-
     private final JLabel         mainlbl          = new JLabel("");
+
     private final JButton        btnRefresh       = new JButton("Refresh");
+
     private final CheckOption    chkEnabled       = new CheckOption("Enable Scheduling", false);
-
     private final CheckOption    chkDebug         = new CheckOption("Enable Debug Output", false);
-
     private final CheckOption    chkAuto          = new CheckOption("Refresh on Timer", false);
-    private final JPanel         blank1            = new JPanel();
-    private final JPanel         blank2            = new JPanel();
-    
+
+    private final JPanel         blank1           = new JPanel();
+
+    private final JPanel         blank2           = new JPanel();
     private final NumericDisplay CycleTime        = new NumericDisplay("Cycle Time", 6, 4, 10, 1);
     private final NumericDisplay MatchCount       = new NumericDisplay("Match Count", 33, 1, 100, 1);
+
     private final DateDisplay    DayStart         = new DateDisplay("Day Start", 11, 0, TZ);
     private final DateDisplay    LunchStart       = new DateDisplay("Lunch Start", 12, 0, TZ);
     private final DateDisplay    LunchEnd         = new DateDisplay("Lunch End", 12, 30, TZ);
-
-
     private final Timer          TickTime         = new Timer();
-
     private boolean              initDone         = false;
 
     private int                  LastMatch        = 0;
@@ -247,7 +217,7 @@ public class CalcPanel extends JPanel {
         if (Date1 == null || Date2 == null) {
             return new OffsetAnswer(-1, -1, "Null Found?", true);
         }
-        int mins = (int) ((Date2.getTime() / 60000) - (Date1.getTime() / 60000));
+        int mins = (int) (Date2.getTime() / 60000 - Date1.getTime() / 60000);
         if (chkDebug.GetValue()) {
             logger.info("  ALL MINS = {}", mins);
         }
@@ -297,5 +267,35 @@ public class CalcPanel extends JPanel {
             logger.info("Calcuation Complete");
         }
         return new OffsetAnswer(hours, mins, str, isNeg);
+    }
+
+    protected class BtnPress implements ActionListener {
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+            final Object obj = e.getSource();
+            final JButton b = (JButton) obj;
+            if (b.equals(btnRefresh)) {
+                CalcPanel.this.CalcTime(LastMatch);
+            }
+        }
+
+    }
+
+    protected class OffsetAnswer {
+        public int     intHours = 0;
+        public int     intMins  = 0;
+        public String  strText  = "";
+        public boolean isNeg    = false;
+
+        public OffsetAnswer() {
+
+        }
+
+        public OffsetAnswer(final int iHours, final int iMins, final String iText, final boolean iNeg) {
+            intHours = iHours;
+            intMins = iMins;
+            strText = iText;
+            isNeg = iNeg;
+        }
     }
 }

@@ -15,17 +15,17 @@ import org.slf4j.LoggerFactory;
  *         https://github.com/VirginiaFIRST/FTC-FieldMgmt
  */
 public class TimingPanel extends JPanel {
-    final Logger              logger           = LoggerFactory.getLogger(Main.class);
+    final Logger                logger           = LoggerFactory.getLogger(Main.class);
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    private static final long   serialVersionUID = 1L;
 
     /**
      * @param args
      */
-    private final StandardClock clock = new StandardClock();
-    private final CalcPanel     timer = new CalcPanel();
+    private final StandardClock clock            = new StandardClock();
+    private final CalcPanel     timer            = new CalcPanel();
 
     public TimingPanel() {
         this.setLayout(new GridLayout(0, 1, 0, 0));

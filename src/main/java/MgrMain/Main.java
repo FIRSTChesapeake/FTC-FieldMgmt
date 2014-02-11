@@ -48,7 +48,7 @@ public class Main {
             StartFTP(FTPport, FTPpass, fieldCount);
             StartUDP(UDPport);
             StartCLI(CLIPort);
-            
+
             MWind.setVisible(true);
 
         } catch (final IOException ex) {
@@ -56,15 +56,6 @@ public class Main {
         } catch (final FtpException ex) {
             logger.info("FTP Start failed with error {}", ex.getMessage());
         }
-    }
-
-    private static BaseUser MakeUser(final String username, final String password) {
-        final BaseUser Buser = new BaseUser();
-        // TODO: This isn't working properly. No Write Access?
-        Buser.setName(username);
-        Buser.setPassword(password);
-        Buser.setHomeDirectory("ftproot");
-        return Buser;
     }
 
     public static void Quit() {
@@ -76,17 +67,6 @@ public class Main {
         CLIserver.abort();
         logger.info("Done. Quitting!");
         System.exit(0);
-    }
-
-    private static UserManager SetupPassword(final String pass, final int fieldCount) throws FtpException {
-        logger.info("Creating FTP Users with password '{}'..", pass);
-        final PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
-        final UserManager um = userManagerFactory.createUserManager();
-        for (int i = 1; i != fieldCount + 1; i++) {
-            logger.info("FTP User field{} created!", i);
-            um.save(MakeUser("field" + i, pass));
-        }
-        return um;
     }
 
     public static void StartFTP(final int FTPport, final String FTPPass, final int fieldCount) throws FtpException {
@@ -101,6 +81,32 @@ public class Main {
         FTPserver.start();
     }
 
+    private static BaseUser MakeUser(final String username, final String password) {
+        final BaseUser Buser = new BaseUser();
+        // TODO: This isn't working properly. No Write Access?
+        Buser.setName(username);
+        Buser.setPassword(password);
+        Buser.setHomeDirectory("ftproot");
+        return Buser;
+    }
+
+    private static UserManager SetupPassword(final String pass, final int fieldCount) throws FtpException {
+        logger.info("Creating FTP Users with password '{}'..", pass);
+        final PropertiesUserManagerFactory userManagerFactory = new PropertiesUserManagerFactory();
+        final UserManager um = userManagerFactory.createUserManager();
+        for (int i = 1; i != fieldCount + 1; i++) {
+            logger.info("FTP User field{} created!", i);
+            um.save(MakeUser("field" + i, pass));
+        }
+        return um;
+    }
+
+    private static void StartCLI(final int port) {
+        logger.info("Starting CLI Server on port {}", port);
+        CLIserver = new TCPSvr(port);
+        logger.info("CLI Server Started!");
+    }
+
     private static void StartUDP(final int port) throws IOException {
         logger.info("Starting UDP Listener on port {}", port);
         UDPserver = new NioDatagramAcceptor();
@@ -109,10 +115,5 @@ public class Main {
         final InetSocketAddress p = new InetSocketAddress(port);
         UDPserver.bind(p);
         logger.info("Listener Started!");
-    }
-    private static void StartCLI(final int port) {
-        logger.info("Starting CLI Server on port {}", port);
-        CLIserver = new TCPSvr(port);
-        logger.info("CLI Server Started!");
     }
 }

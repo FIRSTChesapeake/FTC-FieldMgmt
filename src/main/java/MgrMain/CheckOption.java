@@ -12,19 +12,12 @@ import javax.swing.JPanel;
 
 public class CheckOption extends JPanel {
 
-    private class sTask extends TimerTask {
-        @Override
-        public void run() {
-            CheckOption.this.UnBlink();
-        }
-    }
-
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
-    JLabel                    lbl              = new JLabel("Uninitialized");
 
+    JLabel                    lbl              = new JLabel("Uninitialized");
     JCheckBox                 val              = new JCheckBox();
 
     private final Color       bg               = this.getBackground();
@@ -58,5 +51,12 @@ public class CheckOption extends JPanel {
 
     private void UnBlink() {
         this.setBackground(bg);
+    }
+
+    private class sTask extends TimerTask {
+        @Override
+        public void run() {
+            CheckOption.this.UnBlink();
+        }
     }
 }

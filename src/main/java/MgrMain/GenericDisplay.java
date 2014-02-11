@@ -10,19 +10,12 @@ import javax.swing.JPanel;
 
 public class GenericDisplay extends JPanel {
 
-    private class sTask extends TimerTask {
-        @Override
-        public void run() {
-            GenericDisplay.this.UnBlink();
-        }
-    }
-
     /**
      * 
      */
     private static final long serialVersionUID = 1L;
-    JLabel                    lbl              = new JLabel("Uninitialized");
 
+    JLabel                    lbl              = new JLabel("Uninitialized");
     JLabel                    val              = new JLabel("Uninitialized");
 
     private final Color       bg               = this.getBackground();
@@ -41,10 +34,6 @@ public class GenericDisplay extends JPanel {
         timer.schedule(new sTask(), delay);
     }
 
-    private void UnBlink() {
-        this.setBackground(bg);
-    }
-
     public void UpdateDisplay(final int value) {
         this.UpdateDisplay(value, this.getBackground());
     }
@@ -61,5 +50,16 @@ public class GenericDisplay extends JPanel {
     public void UpdateDisplay(final String value, final Color clr) {
         val.setText(value);
         val.setBackground(clr);
+    }
+
+    private void UnBlink() {
+        this.setBackground(bg);
+    }
+
+    private class sTask extends TimerTask {
+        @Override
+        public void run() {
+            GenericDisplay.this.UnBlink();
+        }
     }
 }

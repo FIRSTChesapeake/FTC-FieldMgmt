@@ -21,10 +21,6 @@ public class RobotPanel extends JPanel {
         this.add(data, BorderLayout.CENTER);
     }
 
-    private void setColor(final Color clr) {
-        this.setBackground(clr);
-    }
-
     public void UpdateInfo(final Robot d) {
         data.setText(String.valueOf(d.TeamID));
         switch (d.Status) {
@@ -43,5 +39,9 @@ public class RobotPanel extends JPanel {
                 break;
         }
         data.repaint();
+    }
+
+    private void setColor(final Color clr) {
+        this.setBackground(clr);
     }
 }

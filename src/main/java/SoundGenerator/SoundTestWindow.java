@@ -17,7 +17,6 @@ import javax.swing.SpinnerNumberModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import MgrMain.CheckOption;
 import MgrMain.Main;
 
 /**
@@ -26,34 +25,16 @@ import MgrMain.Main;
  */
 public class SoundTestWindow extends JPanel {
 
-    private class StopBtnPress implements ActionListener {
-        @Override
-        // TODO: Actually make this work.
-        public void actionPerformed(final ActionEvent e) {
-            logger.info("Stopping All Sound");
-            SoundGen.StopAll();
-        }
-
-    }
-
-    private class TestBtnPress implements ActionListener {
-        @Override
-        public void actionPerformed(final ActionEvent e) {
-            final JButton j = (JButton) e.getSource();
-            logger.info("Test Playing: {}", j.getText());
-            SoundGen.playSound(j.getText(), (int) loopCount.getValue());
-        }
-
-    }
-
     /**
      * 
      */
     private static final long  serialVersionUID = 1L;
 
     final public static Logger logger           = LoggerFactory.getLogger(Main.class);
-    final private SpinnerModel Model = new SpinnerNumberModel(1,1,10,1);
-    final private JSpinner loopCount = new JSpinner(Model);
+
+    final private SpinnerModel Model            = new SpinnerNumberModel(1, 1, 10, 1);
+
+    final private JSpinner     loopCount        = new JSpinner(Model);
 
     public SoundTestWindow() {
         // this.setSize(1000, 500);
@@ -82,5 +63,25 @@ public class SoundTestWindow extends JPanel {
         stop.setEnabled(false);
         this.add(stop);
         this.invalidate();
+    }
+
+    private class StopBtnPress implements ActionListener {
+        @Override
+        // TODO: Actually make this work.
+        public void actionPerformed(final ActionEvent e) {
+            logger.info("Stopping All Sound");
+            SoundGen.StopAll();
+        }
+
+    }
+
+    private class TestBtnPress implements ActionListener {
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+            final JButton j = (JButton) e.getSource();
+            logger.info("Test Playing: {}", j.getText());
+            SoundGen.playSound(j.getText(), (int) loopCount.getValue());
+        }
+
     }
 }

@@ -25,20 +25,14 @@ import MgrMain.Main;
  */
 public class SoundGen {
 
-    final public static Logger  logger  = LoggerFactory.getLogger(Main.class);
+    final public static Logger         logger  = LoggerFactory.getLogger(Main.class);
 
-    protected static final String sPath   = "/Sound/";
-    protected static final String sFormat = "wav";
-    
+    protected static final String      sPath   = "/Sound/";
+    protected static final String      sFormat = "wav";
+
     protected static ArrayList<Thread> threads = new ArrayList<Thread>();
-    
-    public static void StopAll(){
-        for(Thread th : threads){
-            th.interrupt();
-        }
-    }
-    
-    public static synchronized void playSound(final String inFile,final int loop) {
+
+    public static synchronized void playSound(final String inFile, final int loop) {
         final Thread th = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -49,11 +43,17 @@ public class SoundGen {
                     final File file = new File(fPath);
                     final AudioInputStream inputStream = AudioSystem.getAudioInputStream(file);
                     clip.open(inputStream);
-                    if(loop == 0) clip.start();
-                    if(loop >  0) clip.loop(loop);
+                    if (loop == 0) {
+                        clip.start();
+                    }
+                    if (loop > 0) {
+                        clip.loop(loop);
+                    }
                     // TODO: The thread doesn't loop here and wait!?
-                    while(clip.isRunning()){
-                        if(!Thread.currentThread().isInterrupted()) clip.stop();
+                    while (clip.isRunning()) {
+                        if (!Thread.currentThread().isInterrupted()) {
+                            clip.stop();
+                        }
                     }
                 } catch (final LineUnavailableException e) {
                     logger.error("Audio Line Unavailable: {}", e.getMessage());
@@ -72,5 +72,11 @@ public class SoundGen {
         th.setName("SoundGen");
         threads.add(th);
         th.start();
+    }
+
+    public static void StopAll() {
+        for (final Thread th : threads) {
+            th.interrupt();
+        }
     }
 }
