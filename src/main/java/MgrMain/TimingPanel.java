@@ -21,10 +21,6 @@ public class TimingPanel extends JPanel {
      */
     private static final long serialVersionUID = 1L;
 
-    public static void main(final String[] args) {
-
-    }
-
     /**
      * @param args
      */
