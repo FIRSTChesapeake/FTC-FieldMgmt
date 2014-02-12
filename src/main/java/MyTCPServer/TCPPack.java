@@ -19,6 +19,6 @@ public class TCPPack implements Serializable {
     }
 
     public static enum ePackType {
-        NONE, REFRESH_REQUEST
+        NONE, REFRESH_REQUEST, BYE
     }
 }

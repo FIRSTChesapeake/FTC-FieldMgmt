@@ -6,8 +6,10 @@ package MyTCPServer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.SocketException;
 
 import org.slf4j.Logger;
@@ -28,6 +30,8 @@ public class TCPSvr {
     private static final int            maxClientsCount = 5;
     private static final clientThread[] threads         = new clientThread[maxClientsCount];
 
+    private static int ServerPort = 0;
+    
     private static boolean              stopRequested   = false;
 
     public static void sendToAllClients(final TCPPack pack) {
@@ -40,10 +44,10 @@ public class TCPSvr {
 
     public TCPSvr(final int Port) {
         try {
-            sSocket = new ServerSocket(Port);
-            sThread = new serverThread();
+            ServerPort = Port;
+        	sThread = new serverThread();
             sThread.start();
-        } catch (final IOException e) {
+        } catch (final Exception e) {
             logger.error("Error Claiming port for Client Listener");
         }
 
@@ -92,6 +96,9 @@ public class TCPSvr {
                         case REFRESH_REQUEST:
 
                             break;
+                        case BYE:
+                        	stopRequested = true;
+                        	break;
                     }
                 }
                 // Clean up.
@@ -100,6 +107,7 @@ public class TCPSvr {
                         thread = null;
                     }
                 }
+                logger.info("Client from {} has disconnected.",clientSocket.getRemoteSocketAddress().toString());
                 // Close up shop.
                 ObjStream.close();
                 clientSocket.close();
@@ -111,7 +119,7 @@ public class TCPSvr {
 
             }
         }
-
+        
         public void SendPack(final TCPPack pack) {
             try {
                 final ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
@@ -127,9 +135,20 @@ public class TCPSvr {
 
         @Override
         public void run() {
+        	SocketAddress sAddress = new InetSocketAddress("0.0.0.0",ServerPort);
+            try {
+				sSocket = new ServerSocket();
+				sSocket.bind(sAddress);
+				logger.info("Client Port Bound");
+			} catch (IOException e) {
+				logger.error("Unable to Bind Client Listening Port");
+			}
+            
             while (!stopRequested) {
                 try {
+                	logger.info("Waiting for Next Client Connection..");
                     cSocket = sSocket.accept();
+                    logger.info("New Client Received from {}",sSocket.accept().getRemoteSocketAddress().toString());
                     boolean availThread = false;
                     for (clientThread thread : threads) {
                         if (thread == null) {
