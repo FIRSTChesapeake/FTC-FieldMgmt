@@ -6,12 +6,15 @@ package MgrMain;
 import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JFrame;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import FTCMgrShared.*;
 import SoundGenerator.SoundTestWindow;
 
 /**
@@ -30,7 +33,23 @@ public class MainWindow extends JFrame {
 
     private int               LastMatch        = 0;
 
+    private TCPPack			  LastPack		   = null;
+    
+    private Timer			  packTime		   = new Timer();
+    private long			  packDelay		   = 3;
+    
     public MainWindow() {
+    	
+    	final TimerTask packTask = new TimerTask() {
+            @Override
+            public void run() {
+            	if(LastPack != null){
+            		Main.CLIserver.sendToAllClients(LastPack);
+            	}
+            }
+        };
+    	packTime.schedule(packTask, packDelay * 1000, packDelay * 1000);
+    	
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(final WindowEvent e) {
@@ -54,7 +73,21 @@ public class MainWindow extends JFrame {
     }
 
     public void UpdateField(final FCSMsg msg) {
-        if (msg.iKeyPart1 == 1) {
+        TCPPack pack = new TCPPack();
+        if(msg.iMatchState == FCSMsg.MATCH_STATE_TELEOP_WAITING){
+        	pack.FieldState = false;
+        } else {
+        	pack.FieldState = true;
+        }
+        pack.R1 = msg.R1;
+        pack.R2 = msg.R2;
+        pack.B1 = msg.B1;
+        pack.B2 = msg.B2;
+        pack.FieldID = msg.iKeyPart1;
+        pack.PackType = TCPPack.ePackType.REFRESH;
+        LastPack = pack;
+        
+    	if (msg.iKeyPart1 == 1) {
             Field1.UpdateField(msg);
         }
         if (msg.iKeyPart1 == 2) {

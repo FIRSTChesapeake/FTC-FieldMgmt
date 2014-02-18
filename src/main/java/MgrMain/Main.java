@@ -28,7 +28,7 @@ public class Main {
     final public static Logger         logger = LoggerFactory.getLogger(Main.class);
     private static FtpServer           FTPserver;
     private static NioDatagramAcceptor UDPserver;
-    private static TCPSvr              CLIserver;
+    public static TCPSvr              CLIserver;
     public static MainWindow           MWind  = new MainWindow();
 
     /**
@@ -83,7 +83,7 @@ public class Main {
 
     private static BaseUser MakeUser(final String username, final String password) {
         final BaseUser Buser = new BaseUser();
-        // TODO: This isn't working properly. No Write Access?
+        // FIXME FTP isn't working properly. No Write Access?
         Buser.setName(username);
         Buser.setPassword(password);
         Buser.setHomeDirectory("ftproot");

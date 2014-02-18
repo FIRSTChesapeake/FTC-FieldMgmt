@@ -5,7 +5,6 @@ import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-
 public class FieldRobotsPanel extends JPanel {
     /**
      * 

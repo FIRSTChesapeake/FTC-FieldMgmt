@@ -49,7 +49,7 @@ public class SoundGen {
                     if (loop > 0) {
                         clip.loop(loop);
                     }
-                    // TODO: The thread doesn't loop here and wait!?
+                    // FIXME The thread doesn't loop here and wait!?
                     while (clip.isRunning()) {
                         if (!Thread.currentThread().isInterrupted()) {
                             clip.stop();

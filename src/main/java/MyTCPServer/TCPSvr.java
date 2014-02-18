@@ -15,8 +15,8 @@ import java.net.SocketException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import FTCMgrShared.*;
 import MgrMain.Main;
-
 /**
  * @author Matthew Glennon (mglennon@virginiafirst.org)
  *         https://github.com/VirginiaFIRST/FTC-FieldMgmt
@@ -34,7 +34,7 @@ public class TCPSvr {
     
     private static boolean              stopRequested   = false;
 
-    public static void sendToAllClients(final TCPPack pack) {
+    public void sendToAllClients(final TCPPack pack) {
         for (final clientThread thread : threads) {
             if (thread != null) {
                 thread.SendPack(pack);
@@ -70,12 +70,13 @@ public class TCPSvr {
 
     private class clientThread extends Thread {
 
-        private ObjectInputStream    ObjStream    = null;
-        private Socket               clientSocket = null;
+        private ObjectOutputStream    ObjOutStream  = null;
+        private ObjectInputStream    ObjInStream    = null;
+        private Socket               cSocket = null;
         private final clientThread[] threads;
 
         public clientThread(final Socket clientSocket, final clientThread[] threads) {
-            this.clientSocket = clientSocket;
+            this.cSocket = clientSocket;
             this.threads = threads;
         }
 
@@ -83,11 +84,13 @@ public class TCPSvr {
         public void run() {
             final clientThread[] threads = this.threads;
             try {
-                // Create input and output streams for this client.
-                ObjStream = new ObjectInputStream(clientSocket.getInputStream());
+                // Create input and output streams for this client.             
+                ObjOutStream = new ObjectOutputStream(cSocket.getOutputStream());
+                ObjOutStream.flush();
+                ObjInStream = new ObjectInputStream(cSocket.getInputStream());
                 while (!stopRequested) {
                     // Do the magic! ---------------------------------------
-                    final Object inObj = ObjStream.readObject();
+                    final Object inObj = ObjInStream.readObject();
                     final TCPPack inPack = (TCPPack) inObj;
                     switch (inPack.PackType) {
                         case NONE:
@@ -102,32 +105,40 @@ public class TCPSvr {
                     }
                 }
                 // Clean up.
-                for (clientThread thread : threads) {
-                    if (thread == this) {
-                        thread = null;
-                    }
-                }
-                logger.info("Client from {} has disconnected.",clientSocket.getRemoteSocketAddress().toString());
+                CleanThread(this);
+                logger.info("Client from {} has disconnected.",cSocket.getRemoteSocketAddress().toString());
                 // Close up shop.
-                ObjStream.close();
-                clientSocket.close();
+                ObjInStream.close();
+                ObjOutStream.close();
+                cSocket.close();
             } catch (final ClassNotFoundException e) {
-
+            	logger.error("Class Not Found Error init Client Port: {}", e.getMessage());
             } catch (final SocketException e) {
                 logger.info("Client Connection Aborted!");
             } catch (final IOException e) {
-
+            	logger.error("IO Error init Client Port: {}", e.getMessage());
             }
         }
-        
-        public void SendPack(final TCPPack pack) {
-            try {
-                final ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
-                out.writeObject(pack);
-            } catch (final IOException e) {
-
+        private void CleanThread(Thread thread){
+        	for (int i=0; i < maxClientsCount; i++) {
+                if (threads[i] == thread) {
+                    threads[i] = null;
+                }
             }
-
+        }
+        public void SendPack(final TCPPack pack) {
+            if(cSocket.isConnected()){
+	        	try {
+	            	logger.info("Writing Object: " + this.toString());
+	                ObjOutStream.writeObject(pack);
+	            } catch (final IOException e) {
+	            	logger.error("Couldn't write object: {}", e.getMessage());
+	            	CleanThread(this);
+	            }
+            } else {
+            	logger.info("Port is dead!");
+            	stopRequested = true;
+            }
         }
     }
 
@@ -150,15 +161,15 @@ public class TCPSvr {
                     cSocket = sSocket.accept();
                     logger.info("New Client Received from {}",sSocket.accept().getRemoteSocketAddress().toString());
                     boolean availThread = false;
-                    for (clientThread thread : threads) {
-                        if (thread == null) {
-                            (thread = new clientThread(cSocket, threads)).start();
+                    for (int i=0; i < maxClientsCount; i++) {
+                        if (threads[i] == null) {
+                            (threads[i] = new clientThread(cSocket, threads)).start();
                             availThread = true;
                             break;
                         }
                     }
                     if (!availThread) {
-                        // TODO: Tell the client we don't have space?
+                        // FIXME Tell the client we don't have space?
                         cSocket.close();
                     }
                 } catch (final SocketException e) {

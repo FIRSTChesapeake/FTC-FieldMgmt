@@ -33,7 +33,7 @@ public class CalcPanel extends JPanel {
      */
     private static final long    serialVersionUID = 1L;
 
-    // TODO: Make this adjustable
+    // TODO Make timezone adjustable
     private final String         TZ               = "EST";
     private final JLabel         mainlbl          = new JLabel("");
 

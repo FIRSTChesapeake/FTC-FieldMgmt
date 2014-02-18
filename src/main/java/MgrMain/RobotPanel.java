@@ -7,6 +7,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import FTCMgrShared.*;
 public class RobotPanel extends JPanel {
 
     /**
@@ -24,18 +25,17 @@ public class RobotPanel extends JPanel {
     public void UpdateInfo(final Robot d) {
         data.setText(String.valueOf(d.TeamID));
         switch (d.Status) {
-            case FCSMsg.TEAM_STATUS_OK:
+            case GREEN:
                 this.setColor(Color.green);
                 break;
-            case FCSMsg.TEAM_STATUS_WARNING:
+            case YELLOW:
                 this.setColor(Color.yellow);
                 break;
-            case FCSMsg.TEAM_STATUS_ERROR:
-            case FCSMsg.TEAM_STATUS_DISABLED:
+            case RED:
                 this.setColor(Color.red);
                 break;
             default:
-                this.setColor(Color.orange);
+                this.setColor(Color.blue);
                 break;
         }
         data.repaint();

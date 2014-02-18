@@ -1,6 +1,8 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
-
+compileJava{
+    source = ['src/main/java/', '../FTC-Mgr-Shared/src']
+}
 // Apply application plugin to make it easy to run and distribute project
 apply plugin: 'application'
 

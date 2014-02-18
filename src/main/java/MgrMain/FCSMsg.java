@@ -3,6 +3,8 @@
  */
 package MgrMain;
 
+
+import FTCMgrShared.*;
 /**
  * @author Matthew Glennon (mglennon@virginiafirst.org)
  *         https://github.com/VirginiaFIRST/FTC-FieldMgmt
@@ -10,11 +12,6 @@ package MgrMain;
  *         FCS and Underlying UDP stream format (c) John Toebes
  */
 public class FCSMsg {
-    // Team Status Bytes
-    public static final int TEAM_STATUS_OK                  = 0x0000;
-    public static final int TEAM_STATUS_WARNING             = 0x0001;
-    public static final int TEAM_STATUS_ERROR               = 0x0002;
-    public static final int TEAM_STATUS_DISABLED            = 0x0003;
     // Match Types
     public static final int MATCH_TYPE_PRACTICE             = 0x0000;
     public static final int MATCH_TYPE_QUALIFICATION        = 0x0001;

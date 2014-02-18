@@ -70,7 +70,7 @@ public class DateDisplay extends JPanel {
     }
 
     public void setValue(final String value) throws ParseException {
-        // TODO: Fix this - if I ever need it again.
+        // ONEDAY Fix this - if I ever need it again.
         // final Date d = df.parse(value);
         // val.setValue(d);
         throw new ParseException("Not Implemented", 0);

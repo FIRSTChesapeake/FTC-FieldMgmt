@@ -39,7 +39,7 @@ public class Field extends JPanel {
         this.add(DataPanel);
 
         this.add(RobotPanel);
-
+        
         TickTime.schedule(new TimerTask() {
             @Override
             public void run() {
