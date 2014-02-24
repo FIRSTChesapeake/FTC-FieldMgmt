@@ -33,18 +33,19 @@ public class MainWindow extends JFrame {
 
     private int               LastMatch        = 0;
 
-    private TCPPack			  LastPack		   = null;
+    private ClientPack		  LastPack		   = null;
     
     private Timer			  packTime		   = new Timer();
     private long			  packDelay		   = 3;
     
+    
     public MainWindow() {
-    	
+        
     	final TimerTask packTask = new TimerTask() {
             @Override
             public void run() {
             	if(LastPack != null){
-            		Main.CLIserver.sendToAllClients(LastPack);
+            	    logger.info("tick");
             	}
             }
         };
@@ -57,7 +58,6 @@ public class MainWindow extends JFrame {
                 Main.Quit();
             }
         });
-        this.setTitle(AppTitle);
         this.setSize(1000, 500);
         this.setLayout(new GridLayout(0, 2, 0, 0));
 
@@ -71,9 +71,9 @@ public class MainWindow extends JFrame {
 
         this.invalidate();
     }
-
+    
     public void UpdateField(final FCSMsg msg) {
-        TCPPack pack = new TCPPack();
+        ClientPack pack = new ClientPack();
         if(msg.iMatchState == FCSMsg.MATCH_STATE_TELEOP_WAITING){
         	pack.FieldState = false;
         } else {
@@ -84,7 +84,7 @@ public class MainWindow extends JFrame {
         pack.B1 = msg.B1;
         pack.B2 = msg.B2;
         pack.FieldID = msg.iKeyPart1;
-        pack.PackType = TCPPack.ePackType.REFRESH;
+        pack.PackType = ClientPack.ePackType.REFRESH;
         LastPack = pack;
         
     	if (msg.iKeyPart1 == 1) {

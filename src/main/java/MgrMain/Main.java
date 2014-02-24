@@ -17,8 +17,6 @@ import org.apache.mina.transport.socket.nio.NioDatagramAcceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import MyTCPServer.TCPSvr;
-
 /**
  * @author Matthew Glennon (mglennon@virginiafirst.org)
  *         https://github.com/VirginiaFIRST/FTC-FieldMgmt
@@ -28,7 +26,7 @@ public class Main {
     final public static Logger         logger = LoggerFactory.getLogger(Main.class);
     private static FtpServer           FTPserver;
     private static NioDatagramAcceptor UDPserver;
-    public static TCPSvr              CLIserver;
+    //public static NioDatagramAcceptor CLIserver;
     public static MainWindow           MWind  = new MainWindow();
 
     /**
@@ -39,7 +37,7 @@ public class Main {
             // MAIN SETTINGS
             final int FTPport = 2211;
             final int UDPport = 2212;
-            final int CLIPort = 2213;
+            //final int CLIPort = 2213;
             final int fieldCount = 2;
             final String FTPpass = "apple";
             // END MAIN SETTINGS
@@ -47,7 +45,7 @@ public class Main {
             // Build Main Objects!
             StartFTP(FTPport, FTPpass, fieldCount);
             StartUDP(UDPport);
-            StartCLI(CLIPort);
+            //StartCLI(CLIPort);
 
             MWind.setVisible(true);
 
@@ -63,8 +61,9 @@ public class Main {
         FTPserver.stop();
         logger.info("Stopping UDP..");
         UDPserver.unbind();
-        logger.info("Stopping CLI..");
-        CLIserver.abort();
+        //TODO: Ongoing..
+        //logger.info("Stopping CLI..");
+        //CLIserver.unbind();
         logger.info("Done. Quitting!");
         System.exit(0);
     }
@@ -101,16 +100,20 @@ public class Main {
         return um;
     }
 
-    private static void StartCLI(final int port) {
-        logger.info("Starting CLI Server on port {}", port);
-        CLIserver = new TCPSvr(port);
-        logger.info("CLI Server Started!");
-    }
+    /*private static void StartCLI(final int port) throws IOException {
+        logger.info("Starting CLI Listener on port {}", port);
+        CLIserver = new NioDatagramAcceptor();
+        CLIserver.setHandler(new UDPServerHandler(UDPServerHandler.udpPackType.Client));
+        CLIserver.getSessionConfig();
+        final InetSocketAddress p = new InetSocketAddress(port);
+        CLIserver.bind(p);
+        logger.info("CLI Started!");
+    }*/
 
     private static void StartUDP(final int port) throws IOException {
         logger.info("Starting UDP Listener on port {}", port);
         UDPserver = new NioDatagramAcceptor();
-        UDPserver.setHandler(new UDPServerHandler());
+        UDPserver.setHandler(new UDPServerHandler(UDPServerHandler.udpPackType.FCS));
         UDPserver.getSessionConfig();
         final InetSocketAddress p = new InetSocketAddress(port);
         UDPserver.bind(p);
