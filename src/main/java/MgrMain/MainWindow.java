@@ -45,11 +45,11 @@ public class MainWindow extends JFrame {
             @Override
             public void run() {
             	if(LastPack != null){
-            	    logger.info("tick");
+            	    
             	}
             }
         };
-    	packTime.schedule(packTask, packDelay * 1000, packDelay * 1000);
+    	//packTime.schedule(packTask, packDelay * 1000, packDelay * 1000);
     	
         this.addWindowListener(new WindowAdapter() {
             @Override
