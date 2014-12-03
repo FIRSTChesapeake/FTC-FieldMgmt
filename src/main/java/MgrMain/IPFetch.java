@@ -3,7 +3,6 @@ package MgrMain;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -24,7 +23,7 @@ import org.slf4j.LoggerFactory;
 public class IPFetch {
 
     public static class InfoPanel extends JPanel {
-        final Dimension dem = new Dimension(10000,75);
+        final Dimension dem = new Dimension(10000, 75);
         private static final long serialVersionUID = 1L;
         JLabel lbl = new JLabel("System IPs:");
         JLabel ooo = new JLabel("Waiting..");
@@ -40,8 +39,8 @@ public class IPFetch {
             this.add(this.lbl, BorderLayout.CENTER);
             for (final NetworkAdapter n : Adptrs) {
                 for (final String s : n.IPs) {
-                    final JLabel l = new JLabel("  "+n.AdapterName+s);
-                    l.setMaximumSize(dem);
+                    final JLabel l = new JLabel("  " + n.AdapterName + s);
+                    l.setMaximumSize(this.dem);
                     this.add(l);
                 }
             }
@@ -83,7 +82,8 @@ public class IPFetch {
             int cntI = 0;
             for (final Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
                 final NetworkInterface intf = en.nextElement();
-                //final NetworkAdapter n = new NetworkAdapter(intf.getDisplayName());
+                // final NetworkAdapter n = new
+                // NetworkAdapter(intf.getDisplayName());
                 final NetworkAdapter n = new NetworkAdapter(intf.getName());
                 for (final Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
                     final InetAddress adde = enumIpAddr.nextElement();
@@ -104,7 +104,6 @@ public class IPFetch {
             logger.info(" (error retrieving network interface list)");
         }
     }
-
 
     public void print() {
         logger.info("PRINTING NETWORK INFORMATION");

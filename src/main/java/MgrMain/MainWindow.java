@@ -3,8 +3,6 @@
  */
 package MgrMain;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -37,15 +35,15 @@ public class MainWindow extends JFrame {
     private final JPanel UtilPanel3 = new JPanel();
     private final IPFetch.InfoPanel info = new IPFetch.InfoPanel();
 
-    private GenericDisplay PassDisp = new GenericDisplay("Password");
-    private GenericDisplay FtpDisp = new GenericDisplay("FTP Port");
-    private GenericDisplay UdpDisp = new GenericDisplay("UDP Port");
-    
+    private final GenericDisplay PassDisp = new GenericDisplay("Password");
+    private final GenericDisplay FtpDisp = new GenericDisplay("FTP Port");
+    private final GenericDisplay UdpDisp = new GenericDisplay("UDP Port");
+
     private final TimingPanel clock = new TimingPanel();
 
     private int LastMatch = 0;
 
-    public MainWindow(String WindowTitle) {
+    public MainWindow(final String WindowTitle) {
 
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -61,45 +59,46 @@ public class MainWindow extends JFrame {
         this.getContentPane().add(this.Field1);
         this.getContentPane().add(this.Field2);
 
-        ///////////// Build Utilities Frame
+        // /////////// Build Utilities Frame
         final SoundTestWindow Testframe = new SoundTestWindow();
-        
+
         // Setup the various frames' layout
         this.UtilPanel1.setLayout(new GridLayout(0, 1, 0, 0));
         this.UtilPanel2.setLayout(new GridLayout(1, 2, 0, 0));
-        //this.UtilPanel3.setLayout(new GridLayout(0, 1, 0, 0));
-        this.UtilPanel3.setLayout(new BoxLayout(UtilPanel3, BoxLayout.Y_AXIS));
-        
+        // this.UtilPanel3.setLayout(new GridLayout(0, 1, 0, 0));
+        this.UtilPanel3.setLayout(new BoxLayout(this.UtilPanel3, BoxLayout.Y_AXIS));
+
         // Util3 to hold backend settings for display to user
         final JLabel lbl = new JLabel("Static Windows Registry Settings:");
         this.UtilPanel3.add(lbl);
-        this.UtilPanel3.add(PassDisp);
-        this.UtilPanel3.add(FtpDisp);
-        this.UtilPanel3.add(UdpDisp);
+        this.UtilPanel3.add(this.PassDisp);
+        this.UtilPanel3.add(this.FtpDisp);
+        this.UtilPanel3.add(this.UdpDisp);
         this.UtilPanel3.add(new JPanel());
-        
+
         // Util2 to hold the IP list and the contents of Util3
         this.UtilPanel2.add(this.info);
-        this.UtilPanel2.add(UtilPanel3);
-        
-        // Util1 to hold the Sound generation testing and the contents of Util 2 (and by extention, Util3)
+        this.UtilPanel2.add(this.UtilPanel3);
+
+        // Util1 to hold the Sound generation testing and the contents of Util 2
+        // (and by extention, Util3)
         this.UtilPanel1.add(Testframe);
-        this.UtilPanel1.add(UtilPanel2);
-        
+        this.UtilPanel1.add(this.UtilPanel2);
+
         // Add the entire heap of panels to the main window!
         this.getContentPane().add(this.UtilPanel1);
-        
+
         this.getContentPane().add(this.clock);
 
         this.invalidate();
     }
 
-    public void UpdateBackendInfo(String Password, int ftpPort, int udpPort) {
-        PassDisp.UpdateDisplay(Password);
-        FtpDisp.UpdateDisplay(ftpPort);
-        UdpDisp.UpdateDisplay(udpPort);
+    public void UpdateBackendInfo(final String Password, final int ftpPort, final int udpPort) {
+        this.PassDisp.UpdateDisplay(Password);
+        this.FtpDisp.UpdateDisplay(ftpPort);
+        this.UdpDisp.UpdateDisplay(udpPort);
     }
-    
+
     public void UpdateField(final FCSMsg msg) {
         final ClientPack pack = new ClientPack();
         if (msg.iMatchState == FCSMsg.MATCH_STATE_TELEOP_WAITING) {

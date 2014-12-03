@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 public class Main {
 
     public final static String AppTitle = "FTC Field Mgmt Overview System";
-    public final static String AppVersion = "3.4.1";
+    public final static String AppVersion = "3.4.3";
     
     final public static Logger         logger = LoggerFactory.getLogger(Main.class);
     private static FtpServer           FTPserver;
