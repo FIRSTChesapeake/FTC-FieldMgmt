@@ -44,18 +44,20 @@ public class SoundTestWindow extends JPanel {
         final File folder = new File(System.getProperty("user.dir") + SoundGen.sPath);
         final File[] listOfFiles = folder.listFiles();
 
+        logger.info("Taking Inventory of Sound Files..");
         for (final File listOfFile : listOfFiles) {
             if (listOfFile.isFile()) {
                 files = listOfFile.getName();
                 if (files.endsWith("." + SoundGen.sFormat)) {
                     final String filename = files.replace("." + SoundGen.sFormat, "");
-                    logger.info("Buiding Test Btn: {}", filename);
+                    logger.info("  Found Sound: {}", filename);
                     final JButton j = new JButton(filename);
                     j.addActionListener(new TestBtnPress());
                     this.add(j);
                 }
             }
         }
+        logger.info("Inventory Complete!");
         this.add(loopCount);
 
         final JButton stop = new JButton("STOP");

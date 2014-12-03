@@ -23,11 +23,14 @@ import org.slf4j.LoggerFactory;
  */
 public class Main {
 
+    public final static String AppTitle = "FTC Field Mgmt Overview System";
+    public final static String AppVersion = "3.4.1";
+    
     final public static Logger         logger = LoggerFactory.getLogger(Main.class);
     private static FtpServer           FTPserver;
     private static NioDatagramAcceptor UDPserver;
     //public static NioDatagramAcceptor CLIserver;
-    public static MainWindow           MWind  = new MainWindow();
+    public static MainWindow           MWind;
 
     /**
      * @param args
@@ -41,10 +44,16 @@ public class Main {
             final int fieldCount = 2;
             final String FTPpass = "apple";
             // END MAIN SETTINGS
-
+            logger.info("Starting {}",AppTitle);
+            logger.info("This is Version {}",AppVersion);
+            
+            // Create main Window!
+            MWind = new MainWindow(AppTitle+" - Version "+AppVersion);
+            
             // PRINT IP ADDRESSES
             final IPFetch ipf = new IPFetch();
             ipf.print();
+            MWind.UpdateNetInfo(ipf.Adapters);
             
             // Build Main Objects!
             StartFTP(FTPport, FTPpass, fieldCount);
