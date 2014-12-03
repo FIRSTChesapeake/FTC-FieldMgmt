@@ -49,6 +49,7 @@ public class Main {
             
             // Create main Window!
             MWind = new MainWindow(AppTitle+" - Version "+AppVersion);
+            MWind.UpdateBackendInfo(FTPpass, FTPport, UDPport);
             
             // PRINT IP ADDRESSES
             final IPFetch ipf = new IPFetch();

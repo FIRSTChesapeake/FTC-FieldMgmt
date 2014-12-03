@@ -1,6 +1,7 @@
 package MgrMain;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,6 +27,8 @@ public class GenericDisplay extends JPanel {
         this.setLayout(new GridLayout(0, 2, 0, 0));
         this.add(lbl);
         this.add(val);
+        final Dimension dem = new Dimension(10000,100);
+        this.setMaximumSize(dem);
     }
 
     public void Blink(final Color clr, final int delay) {

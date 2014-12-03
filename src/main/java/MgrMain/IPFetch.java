@@ -2,6 +2,7 @@ package MgrMain;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -13,6 +14,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -22,20 +24,15 @@ import org.slf4j.LoggerFactory;
 public class IPFetch {
 
     public static class InfoPanel extends JPanel {
+        final Dimension dem = new Dimension(10000,75);
         private static final long serialVersionUID = 1L;
         JLabel lbl = new JLabel("System IPs:");
         JLabel ooo = new JLabel("Waiting..");
 
         public InfoPanel() {
-            this.setLayout(new GridLayout(0, 1, 0, 0));
+            this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
             this.add(this.ooo, BorderLayout.CENTER);
-        }
-
-        public InfoPanel(final List<NetworkAdapter> Adptrs) {
-            this.setLayout(new GridLayout(0, 0, 0, 0));
-            this.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            this.UpdateList(Adptrs);
         }
 
         public void UpdateList(final List<NetworkAdapter> Adptrs) {
@@ -43,10 +40,12 @@ public class IPFetch {
             this.add(this.lbl, BorderLayout.CENTER);
             for (final NetworkAdapter n : Adptrs) {
                 for (final String s : n.IPs) {
-                    final JLabel l = new JLabel(n.AdapterName+s);
+                    final JLabel l = new JLabel("  "+n.AdapterName+s);
+                    l.setMaximumSize(dem);
                     this.add(l);
                 }
             }
+            this.add(new JPanel());
             this.repaint();
         }
     }
@@ -106,10 +105,6 @@ public class IPFetch {
         }
     }
 
-    public InfoPanel fetchInfoPanel() {
-        final InfoPanel p = new InfoPanel(this.Adapters);
-        return p;
-    }
 
     public void print() {
         logger.info("PRINTING NETWORK INFORMATION");
