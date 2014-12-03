@@ -42,6 +42,10 @@ public class Main {
             final String FTPpass = "apple";
             // END MAIN SETTINGS
 
+            // PRINT IP ADDRESSES
+            final IPFetch ipf = new IPFetch();
+            ipf.print();
+            
             // Build Main Objects!
             StartFTP(FTPport, FTPpass, fieldCount);
             StartUDP(UDPport);

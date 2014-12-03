@@ -27,6 +27,7 @@ public class FieldDataPanel extends JPanel {
     private final GenericDisplay a6               = new GenericDisplay("Comm Status");
 
     private final CheckOption    PlaySounds       = new CheckOption("Play Sounds", true);
+    private final CheckOption    PlayHorn       = new CheckOption("Play Horn", false);
 
     private int                  LastState        = -1;
     private boolean              InitDone         = false;
@@ -44,6 +45,7 @@ public class FieldDataPanel extends JPanel {
         this.add(a6);
 
         this.add(PlaySounds);
+        this.add(PlayHorn);
     }
 
     public void SetStatus(final String value, final Color clr) {
@@ -72,40 +74,37 @@ public class FieldDataPanel extends JPanel {
         if (msg.iMatchState != LastState) {
             // If we're playing sounds at all..
             if (InitDone && PlaySounds.GetValue()) {
-                // FOG HORN - Disabling the check for the fog horn. I hate the
-                // damn horn anyway.
-                /*
-                 * if (!msg.SmoothMatch(LastState)) {
-                 * SoundGen.playSound("FOGHORN");
-                 * logger.info("BAD MATCH!");
-                 * a1.Blink(Color.red, 1000);
-                 * } else {
-                 */
-                // Generate the rest of the game sounds
-                switch (msg.iMatchState) {
-                    case FCSMsg.MATCH_STATE_AUTONOMOUS_WAITING:
-                        // Acceptable mode - but we play no sound
-                        break;
-                    case FCSMsg.MATCH_STATE_AUTONOMOUS_RUNNING:
-                        SoundGen.playSound("CHARGE", 0);
-                        break;
-                    case FCSMsg.MATCH_STATE_TELEOP_WAITING:
-                        SoundGen.playSound("ENDAUTON", 0);
-                        break;
-                    case FCSMsg.MATCH_STATE_TELEOP_RUNNING:
-                        SoundGen.playSound("3BELLS", 0);
-                        break;
-                    case FCSMsg.MATCH_STATE_ENDGAME_RUNNING:
-                        SoundGen.playSound("WARNEOM", 0);
-                        break;
-                    case FCSMsg.MATCH_STATE_ENDGAME_ENDED:
-                        SoundGen.playSound("ENDMATCH", 0);
-                        break;
-                    default:
-                        logger.error("Unexpected Mode received in the FieldDataPanel class");
-                        break;
+                // If not a smooth match and we're playing the horn (I hope not.)
+                if (!msg.SmoothMatch(LastState) && PlayHorn.GetValue()) {
+                    SoundGen.playSound("FOGHORN", 0);
+                    logger.info("BAD MATCH!");
+                    a1.Blink(Color.red, 1000);
+                } else {
+                    // Generate the rest of the game sounds
+                    switch (msg.iMatchState) {
+                       case FCSMsg.MATCH_STATE_AUTONOMOUS_WAITING:
+                           // Acceptable mode - but we play no sound
+                           break;
+                       case FCSMsg.MATCH_STATE_AUTONOMOUS_RUNNING:
+                           SoundGen.playSound("CHARGE", 0);
+                           break;
+                       case FCSMsg.MATCH_STATE_TELEOP_WAITING:
+                           SoundGen.playSound("ENDAUTON", 0);
+                           break;
+                       case FCSMsg.MATCH_STATE_TELEOP_RUNNING:
+                           SoundGen.playSound("3BELLS", 0);
+                           break;
+                       case FCSMsg.MATCH_STATE_ENDGAME_RUNNING:
+                           SoundGen.playSound("WARNEOM", 0);
+                           break;
+                       case FCSMsg.MATCH_STATE_ENDGAME_ENDED:
+                           SoundGen.playSound("ENDMATCH", 0);
+                           break;
+                       default:
+                           logger.error("Unexpected Mode received in the FieldDataPanel class");
+                           break;
+                    }
                 }
-                // }
             }
             LastState = msg.iMatchState;
             logger.info("Field " + String.valueOf(msg.iKeyPart1) + " says: " + msg.MatchState());
