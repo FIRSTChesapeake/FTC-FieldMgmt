@@ -82,8 +82,7 @@ public class IPFetch {
             int cntI = 0;
             for (final Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
                 final NetworkInterface intf = en.nextElement();
-                // final NetworkAdapter n = new
-                // NetworkAdapter(intf.getDisplayName());
+                // final NetworkAdapter n = new NetworkAdapter(intf.getDisplayName());
                 final NetworkAdapter n = new NetworkAdapter(intf.getName());
                 for (final Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
                     final InetAddress adde = enumIpAddr.nextElement();
@@ -92,8 +91,7 @@ public class IPFetch {
                         cntI++;
                     }
                 }
-                // If the adapter isn't loopback and it has at least 1 IP
-                // address.
+                // If the adapter isn't loopback and it has at least 1 IP address.
                 if (n.IPs.size() > 0) {
                     this.Adapters.add(n);
                 }

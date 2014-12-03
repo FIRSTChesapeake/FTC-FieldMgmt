@@ -80,8 +80,7 @@ public class MainWindow extends JFrame {
         this.UtilPanel2.add(this.info);
         this.UtilPanel2.add(this.UtilPanel3);
 
-        // Util1 to hold the Sound generation testing and the contents of Util 2
-        // (and by extention, Util3)
+        // Util1 to hold the Sound generation testing and the contents of Util 2 (and by extention, Util3)
         this.UtilPanel1.add(Testframe);
         this.UtilPanel1.add(this.UtilPanel2);
 
