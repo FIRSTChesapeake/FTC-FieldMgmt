@@ -46,7 +46,7 @@ public class CalcPanel extends JPanel {
     private final JPanel         blank1           = new JPanel();
 
     private final JPanel         blank2           = new JPanel();
-    private final NumericDisplay CycleTime        = new NumericDisplay("Cycle Time", 6, 4, 10, 1);
+    private final NumericDisplay CycleTime        = new NumericDisplay("Cycle Time", 6, 4, 10, 0.5);
     private final NumericDisplay MatchCount       = new NumericDisplay("Match Count", 33, 1, 100, 1);
 
     private final DateDisplay    DayStart         = new DateDisplay("Day Start", 11, 0, TZ);

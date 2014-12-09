@@ -27,7 +27,7 @@ public class NumericDisplay extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
-    public NumericDisplay(final String name, final int Value, final int Min, final int Max, final int Step) {
+    public NumericDisplay(final String name, final int Value, final int Min, final int Max, final double Step) {
         lbl.setText(name);
         Model = new SpinnerNumberModel(Value, Min, Max, Step);
         val = new JSpinner(Model);
