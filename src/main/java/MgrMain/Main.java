@@ -32,11 +32,44 @@ public class Main {
     //public static NioDatagramAcceptor CLIserver;
     public static MainWindow           MWind;
 
+    private static int PacketSpeedLimit = 4;
     /**
      * @param args
      */
+    
+    private static void handleArg(String arg) {
+        // Handle commandline arg.
+        // Leaving out input validation here since
+        // it's really advanced use anyway.
+        logger.info("Processing Arg: {}",arg);
+        if(arg.contains("=")) {
+            String s[] = arg.split("=");
+            String key = s[0], value = s[1];
+            switch(key) {
+                case "packlimit":
+                    PacketSpeedLimit = Integer.parseInt(value);
+                    logger.info("Set Packet Skip to {}",PacketSpeedLimit);
+                    break;
+            }
+        } else {
+            switch(arg) {
+                case "debug":
+                    // TODO: Change to debug instead of INFO Level?
+                    break;
+            }
+        }
+    }
+    
     public static void main(final String[] args) {
         try {
+            
+            if(args.length > 0) {
+                logger.info("{} Arguements found..",args.length);
+                for(int i=0;i<args.length;i++) { 
+                    handleArg(args[i]);
+                }
+            }
+            
             // MAIN SETTINGS
             final int FTPport = 2211;
             final int UDPport = 2212;
@@ -46,6 +79,16 @@ public class Main {
             // END MAIN SETTINGS
             logger.info("Starting {}",AppTitle);
             logger.info("This is Version {}",AppVersion);
+            String logLvl = "";
+            if(logger.isTraceEnabled()) logLvl = "TRACE";
+            else if(logger.isDebugEnabled()) logLvl = "DEBUG";
+            else if(logger.isInfoEnabled()) logLvl = "INFO";
+            else if(logger.isWarnEnabled()) logLvl = "WARN";
+            else if(logger.isErrorEnabled()) logLvl = "ERR";
+            else logLvl = "UNK";
+            
+            logger.error("Log File Level set to {}",logLvl);
+            logger.debug("HI");
             
             // Create main Window!
             MWind = new MainWindow(AppTitle+" - Version "+AppVersion);
@@ -58,7 +101,7 @@ public class Main {
             
             // Build Main Objects!
             StartFTP(FTPport, FTPpass, fieldCount);
-            StartUDP(UDPport);
+            StartUDP(UDPport,PacketSpeedLimit);
             //StartCLI(CLIPort);
 
             MWind.setVisible(true);
@@ -71,14 +114,14 @@ public class Main {
     }
 
     public static void Quit() {
-        logger.info("Stopping FTP..");
+        logger.warn("Stopping FTP..");
         FTPserver.stop();
-        logger.info("Stopping UDP..");
+        logger.warn("Stopping UDP..");
         UDPserver.unbind();
         //TODO: Ongoing..
-        //logger.info("Stopping CLI..");
+        //logger.warn("Stopping CLI..");
         //CLIserver.unbind();
-        logger.info("Done. Quitting!");
+        logger.warn("Done. Quitting!");
         System.exit(0);
     }
 
@@ -124,10 +167,10 @@ public class Main {
         logger.info("CLI Started!");
     }*/
 
-    private static void StartUDP(final int port) throws IOException {
+    private static void StartUDP(final int port, final int PacketSpeedLimit) throws IOException {
         logger.info("Starting UDP Listener on port {}", port);
         UDPserver = new NioDatagramAcceptor();
-        UDPserver.setHandler(new UDPServerHandler(UDPServerHandler.udpPackType.FCS));
+        UDPserver.setHandler(new UDPServerHandler(UDPServerHandler.udpPackType.FCS,PacketSpeedLimit));
         UDPserver.getSessionConfig();
         final InetSocketAddress p = new InetSocketAddress(port);
         UDPserver.bind(p);

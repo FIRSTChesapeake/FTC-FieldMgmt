@@ -16,6 +16,13 @@ import org.slf4j.LoggerFactory;
  *         https://github.com/VirginiaFIRST/FTC-FieldMgmt
  */
 public class UDPServerHandler extends IoHandlerAdapter {
+    // Setup vars to handle only refreshing the screen
+    // on every n'th packet - to limit screen refresh lag
+    // on slower processors.
+    private int dropCount = 0;
+    private int dropLimit = 4;
+    public boolean LimitSpeed = true;
+    
     public enum udpPackType {
         FCS,
         Client
@@ -25,8 +32,15 @@ public class UDPServerHandler extends IoHandlerAdapter {
 
     final private udpPackType typeFlag;
 
-    public UDPServerHandler(final udpPackType type) {
+    public UDPServerHandler(final udpPackType type, final int PacketSpeedLimit) {
         this.typeFlag = type;
+        if(PacketSpeedLimit == 0) {
+            LimitSpeed = false;
+        } else {
+            LimitSpeed = true;
+            dropLimit = PacketSpeedLimit;
+        }
+        
     }
 
     @Override
@@ -42,7 +56,11 @@ public class UDPServerHandler extends IoHandlerAdapter {
             case FCS:
                 final byte[] by = ((IoBuffer) message).array();
                 final FCSMsg fMsg = new FCSMsg(by, StrAddress);
-                Main.MWind.UpdateField(fMsg);
+                if(dropCount == dropLimit || !LimitSpeed) {
+                    Main.MWind.UpdateField(fMsg);
+                    dropCount = 0;
+                }
+                dropCount++;
                 break;
             case Client:
                 // final ClientPack cMsg = (ClientPack) message;
