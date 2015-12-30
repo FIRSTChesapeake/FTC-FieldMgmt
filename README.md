@@ -1,7 +1,7 @@
 FTC Field Mgmt Software
 
 THIS PROJECT IS ARCHIVED
-This project ois no longer useful for FTC.
+This project is no longer useful for FTC.
 It is here for archive purposes only.
 
 ---
